@@ -72,4 +72,14 @@ ALTER TABLE `fbAdAccount` ADD FOREIGN KEY (`page_Id`) REFERENCES `fbAdPage` (`pa
 INSERT INTO `roles` (`role_Id`, `role_description`,`role_name`) VALUES
 (1, "Quản Trị Viên (Admin) quản lý và bảo trì hệ thống, đồng thời đảm bảo an ninh. Họ có quyền toàn diện để cập nhật, giải quyết sự cố và quản lý dữ liệu, đảm bảo hệ thống hoạt động ổn định và an toàn.", "Admin"),
 (2, "Tập trung vào việc tạo chiến dịch quảng cáo và tăng nhận thức thương hiệu để thu hút khách hàng.", "Sale Employee"),
-(3, "Chịu trách nhiệm bán sản phẩm/dịch vụ, tư vấn và duy trì mối quan hệ với khách hàng để đạt mục tiêu doanh số.", "Marketing Employee")
+(3, "Chịu trách nhiệm bán sản phẩm/dịch vụ, tư vấn và duy trì mối quan hệ với khách hàng để đạt mục tiêu doanh số.", "Marketing Employee");
+
+INSERT INTO `users` VALUES
+(1,"Admin","admin","123456789","0868524122","token_admin"),
+(2,"Nhân viên A","user1","password1","0000000001","token_user1"),
+(3,"Nhân viên B","user2","password2","0000000002","token_user2");
+
+INSERT INTO `userrole` VALUES
+(1,1),
+(2,2),
+(3,2);
