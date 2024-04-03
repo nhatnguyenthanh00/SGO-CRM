@@ -1,5 +1,6 @@
 package com.example.sgo_crm.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -53,6 +51,7 @@ public class User implements UserDetails {
     private String token;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<FbAdPage> fbAdPages;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -61,6 +60,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_Id"),
             inverseJoinColumns = @JoinColumn(name = "role_Id")
     )
+    @JsonManagedReference
     private Set<Role> roles;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -69,6 +69,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_Id"),
             inverseJoinColumns = @JoinColumn(name = "campaign_Id")
     )
+    @JsonManagedReference
     private Set<Campaign> campaigns;
 
     @Override

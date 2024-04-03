@@ -1,5 +1,6 @@
 package com.example.sgo_crm.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,7 @@ public class FbAdAccount {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_Id")
+    @JsonBackReference
     private FbAdPage fbAdPage;
 
     @Override

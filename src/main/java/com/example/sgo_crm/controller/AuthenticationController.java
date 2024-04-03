@@ -1,5 +1,6 @@
 package com.example.sgo_crm.controller;
 
+import com.example.sgo_crm.exception.AuthenticationFailedException;
 import com.example.sgo_crm.request.AuthenticationRequest;
 import com.example.sgo_crm.service.impl.AuthenticationServiceImpl;
 import jakarta.validation.Valid;
@@ -7,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,4 +36,8 @@ public class AuthenticationController {
         return ResponseEntity.ok().body(authenticationService.authenticate(request));
     }
 
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<?> handleAuthenticationFailedException(AuthenticationFailedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
 }
