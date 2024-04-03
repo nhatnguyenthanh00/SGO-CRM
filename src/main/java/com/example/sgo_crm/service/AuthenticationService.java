@@ -1,9 +1,9 @@
 package com.example.sgo_crm.service;
 
-import org.springframework.stereotype.Service;
+import com.example.sgo_crm.request.AuthenticationRequest;
 
 public interface AuthenticationService {
 
-
+    String authenticate(AuthenticationRequest request);
 
 }
