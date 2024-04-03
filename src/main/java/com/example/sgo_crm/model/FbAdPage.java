@@ -1,5 +1,7 @@
 package com.example.sgo_crm.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,13 +32,16 @@ public class FbAdPage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_Id")
+    @JsonBackReference
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "campaign_Id")
+    @JsonBackReference
     private Campaign campaign;
 
     @OneToMany(mappedBy = "fbAdPage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<FbAdAccount> fbAdAccounts;
 
     @Override
