@@ -34,6 +34,9 @@ public class Campaign {
     @Column(name = "endDate")
     private Date endDate;
 
+    @Column(name = "status")
+    private int status = -1;
+
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<FbAdPage> fbAdPages;
