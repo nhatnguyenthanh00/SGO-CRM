@@ -29,11 +29,11 @@ public class Campaign {
     @Column(name = "campaign_name")
     private String campaignName;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "startDate")
     private Date startDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "endDate")
     private Date endDate;
 
