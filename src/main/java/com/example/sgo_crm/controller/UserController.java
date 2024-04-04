@@ -33,6 +33,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> findUser(@RequestParam(value = "id", required = false) String userId,
+                                      @RequestParam(value = "name", required = false) String name,
+                                      @RequestParam(value = "role", required = false) String role){
+        List<User> users = userService.findUser(userId,name,role);
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Tìm kiếm thành công")
+                .data(users).build();
+        if(users.isEmpty()) {
+            apiResponse.setMessage("Không có kết quả");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
     @PostMapping()
     public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest request,
                                      BindingResult result) {

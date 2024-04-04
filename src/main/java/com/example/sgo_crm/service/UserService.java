@@ -1,6 +1,5 @@
 package com.example.sgo_crm.service;
 
-import com.example.sgo_crm.model.APIResponse;
 import com.example.sgo_crm.model.User;
 import com.example.sgo_crm.request.UserRequest;
 
@@ -16,4 +15,6 @@ public interface UserService {
     User updateUserInfo(String id, UserRequest request);
 
     List<User> getAllUser();
+
+    List<User> findUser(String id, String name, String role);
 }
