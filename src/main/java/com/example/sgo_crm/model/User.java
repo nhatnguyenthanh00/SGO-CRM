@@ -54,7 +54,7 @@ public class User implements UserDetails {
     @JsonManagedReference
     private Set<FbAdPage> fbAdPages;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "UserRole",
             joinColumns = @JoinColumn(name = "user_Id"),

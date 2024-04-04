@@ -140,6 +140,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @Override
+    public List<User> findUser(String id, String name, String role) {
+        return userRepository.findUser(id, name, role);
+    }
+
     public List<UserDTO> getAllUserDTO(){
         List<User> userList = userRepository.findAll();
         List<UserDTO> userDTOList = new ArrayList<>();
@@ -151,5 +156,9 @@ public class UserServiceImpl implements UserService {
             userDTOList.add(userDTO);
         }
         return userDTOList;
+    }
+
+    public void deleteUserById(String id){
+        userRepository.deleteById(id);
     }
 }

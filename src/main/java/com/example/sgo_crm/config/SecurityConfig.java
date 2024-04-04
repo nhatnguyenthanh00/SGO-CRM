@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.PATCH,"/api/v1/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/users/search").permitAll()
                         .requestMatchers("/api/v1/role/**").permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll())
                 .sessionManagement(session -> session
