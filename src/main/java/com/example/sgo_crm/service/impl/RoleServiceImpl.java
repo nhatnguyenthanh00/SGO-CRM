@@ -6,6 +6,8 @@ import com.example.sgo_crm.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -20,4 +22,11 @@ public class RoleServiceImpl implements RoleService {
     public Role findByRoleName(String rolename) {
         return roleRepository.findByRoleName(rolename);
     }
+
+    @Override
+    public List<Role> getAllRole(){
+        return roleRepository.findAll();
+    }
+
+
 }

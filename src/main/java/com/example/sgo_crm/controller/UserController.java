@@ -25,6 +25,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping(value = "/all")
+    public ResponseEntity<?> getAllUser(){
+
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
+    }
+
     @PostMapping()
     public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest request,
                                      BindingResult result) {
