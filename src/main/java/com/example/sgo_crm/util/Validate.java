@@ -67,7 +67,7 @@ public class Validate {
             throw new InvalidFormatException("Password không được để trống");
         }
 
-        if(password.length() > 8) {
+        if(password.length() < 8) {
             throw new InvalidFormatException("Password phải có ít nhất 8 ký tự");
         }
 

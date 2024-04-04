@@ -3,6 +3,7 @@ package com.example.sgo_crm.service.impl;
 import com.example.sgo_crm.DTO.UserDTO;
 import com.example.sgo_crm.exception.DataSaveException;
 import com.example.sgo_crm.exception.UsernameExistsException;
+import com.example.sgo_crm.model.APIResponse;
 import com.example.sgo_crm.model.Role;
 import com.example.sgo_crm.model.User;
 import com.example.sgo_crm.repository.UserRepository;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(UserRequest request) {
+    public User addUser(UserRequest request) {
 
         validate.isValidData(request);
 
@@ -72,6 +73,8 @@ public class UserServiceImpl implements UserService {
                     .build();
 
             save(user);
+
+            return user;
         }catch (DataSaveException e) {
             throw new DataSaveException(AppConstants.ERROR_SAVING);
         }
@@ -83,7 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(String id, UserRequest request) {
+    public User updateUserInfo(String id, UserRequest request) {
 
         validate.isValidPhone(request.getPhonenumber());
 
@@ -124,6 +127,9 @@ public class UserServiceImpl implements UserService {
             user.setRoles(roleSet);
 
             save(user);
+
+            return user;
+
         }catch (DataSaveException e) {
             throw new DataSaveException(AppConstants.ERROR_SAVING);
         }
