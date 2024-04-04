@@ -1,5 +1,6 @@
 package com.example.sgo_crm.service.impl;
 
+import com.example.sgo_crm.DTO.UserDTO;
 import com.example.sgo_crm.exception.DataSaveException;
 import com.example.sgo_crm.exception.UsernameExistsException;
 import com.example.sgo_crm.model.Role;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -66,5 +69,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(String id) {
         return userRepository.findById(id).get();
+    }
+
+    @Override
+    public List<User> getAllUser(){
+        return userRepository.findAll();
+    }
+
+    public List<UserDTO> getAllUserDTO(){
+        List<User> userList = userRepository.findAll();
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for(User user : userList){
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserId(user.getUserId());
+            userDTO.setFullname(user.getFullname());
+            userDTO.setRoles(user.getRoles());
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
     }
 }
