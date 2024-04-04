@@ -9,6 +9,7 @@ import com.example.sgo_crm.request.CampaignAddRequest;
 import com.example.sgo_crm.service.impl.CampaignServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -49,15 +50,15 @@ public class CampaignController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCampaigns() {
-        List<Campaign> campaigns = campaignService.getCampaigns();
+    public ResponseEntity<?> getCampaigns(@RequestParam(defaultValue = "0", required = false) int page) {
+        Page<Campaign> campaigns = campaignService.getCampaigns(page);
 
         APIResponse apiResponse = APIResponse.builder()
                 .statusCode(200)
                 .message("Thành công lấy danh sách chiến dịch")
-                .data(campaigns).build();
+                .data(campaigns.getContent()).build();
 
-        if(campaigns.isEmpty()) {
+        if(campaigns.getContent().isEmpty()) {
             apiResponse.setMessage("Danh sách chiến dịch rỗng");
         }
 

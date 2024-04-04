@@ -10,12 +10,14 @@ import com.example.sgo_crm.service.CampaignService;
 import com.example.sgo_crm.util.AppConstants;
 import com.example.sgo_crm.util.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
@@ -72,7 +74,10 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public List<Campaign> getCampaigns() {
-        return campaignRepository.findAll();
+    public Page<Campaign> getCampaigns(int page) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return campaignRepository.findAll(pageable);
     }
+
 }

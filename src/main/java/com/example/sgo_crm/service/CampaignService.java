@@ -2,6 +2,7 @@ package com.example.sgo_crm.service;
 
 import com.example.sgo_crm.model.Campaign;
 import com.example.sgo_crm.request.CampaignAddRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface CampaignService {
 
     Campaign getCampaign(Long id);
 
-    List<Campaign> getCampaigns();
+    Page<Campaign> getCampaigns(int page);
 }
