@@ -65,4 +65,8 @@ public class CampaignServiceImpl implements CampaignService {
             throw new InvalidFormatException(AppConstants.DATE_IS_INVALID);
         }
     }
+
+    public void deleteById(Long id){
+        campaignRepository.deleteById(id);
+    }
 }

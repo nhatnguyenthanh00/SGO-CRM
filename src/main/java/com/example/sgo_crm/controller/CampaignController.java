@@ -41,6 +41,12 @@ public class CampaignController {
                 .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaign).build());
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteCampaign(@PathVariable Long id){
+        campaignService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Delete campaign successful.");
+    }
+
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

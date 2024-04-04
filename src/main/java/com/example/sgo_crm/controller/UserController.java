@@ -91,7 +91,7 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable String id){
         userService.deleteUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Delete successful.");
+        return ResponseEntity.status(HttpStatus.OK).body("Delete user successful.");
     }
 
     @ExceptionHandler(UsernameExistsException.class)

@@ -8,5 +8,4 @@ public interface CampaignService {
 
     Campaign addCampaign(CampaignAddRequest campaignAddRequest);
 
-    Campaign getCampain(Long id);
 }
