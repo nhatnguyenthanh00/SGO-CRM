@@ -80,4 +80,8 @@ public class CampaignServiceImpl implements CampaignService {
         return campaignRepository.findAll(pageable);
     }
 
+    public void deleteCampaign(Long id){
+        campaignRepository.deleteById(id);
+    }
+
 }
