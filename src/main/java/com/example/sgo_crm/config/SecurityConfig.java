@@ -37,7 +37,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH,"/api/v1/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/users/search").permitAll()
                         .requestMatchers("/api/v1/role/**").permitAll()
-                        .requestMatchers("/api/v1/users/**").permitAll())
+                        .requestMatchers("/api/v1/users/**").permitAll()
+                        .requestMatchers("/api/v1/campaigns/**").permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

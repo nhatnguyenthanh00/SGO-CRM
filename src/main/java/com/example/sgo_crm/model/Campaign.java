@@ -1,6 +1,7 @@
 package com.example.sgo_crm.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,9 +29,11 @@ public class Campaign {
     @Column(name = "campaign_name")
     private String campaignName;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "startDate")
     private Date startDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "endDate")
     private Date endDate;
 
