@@ -14,4 +14,6 @@ public interface CampaignService {
     Campaign getCampaign(Long id);
 
     Page<Campaign> getCampaigns(int page);
+
+    Page<Campaign> findCampaigns(int page);
 }
