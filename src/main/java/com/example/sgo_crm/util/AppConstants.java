@@ -7,5 +7,7 @@ public class AppConstants {
 
     public static final String USERNAME_IS_ALREADY_EXIST = "Username đã tồn tại";
 
+    public static final String PHONENUMBER_IS_ALREADY_EXIST = "Số điện thoại đã tồn tại";
+
     public static final String ERROR_SAVING = "Lỗi khi lưu";
 }

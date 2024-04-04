@@ -33,7 +33,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/signin").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/users/{id}").permitAll())
+                        .requestMatchers(HttpMethod.GET,"/api/v1/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PATCH,"/api/v1/users/{id}").permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
