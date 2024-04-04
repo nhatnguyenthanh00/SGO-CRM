@@ -33,6 +33,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id){
+        userService.deleteUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Delete successful.");
+    }
+
     @PostMapping()
     public ResponseEntity<?> addUser(@Valid @RequestBody AddUserRequest request,
                                      BindingResult result) {

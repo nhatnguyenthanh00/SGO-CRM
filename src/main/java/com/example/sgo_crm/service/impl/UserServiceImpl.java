@@ -88,4 +88,8 @@ public class UserServiceImpl implements UserService {
         }
         return userDTOList;
     }
+
+    public void deleteUserById(String id){
+        userRepository.deleteById(id);
+    }
 }
