@@ -79,6 +79,11 @@ public class Validate {
     }
 
     public void isValidData(CampaignAddRequest campaignAddRequest){
+        System.out.println(campaignAddRequest.getStartDate());
+        System.out.println(campaignAddRequest.getEndDate());
+        if (!(campaignAddRequest.getStartDate() instanceof Date) || !(campaignAddRequest.getEndDate() instanceof Date)) {
+            throw new InvalidFormatException("Ngày bắt đầu hoặc ngày kết thúc chiến dịch không hợp lệ");
+        }
         isValidCampaignName(campaignAddRequest.getCampaignName());
         isValidCampaignDate(campaignAddRequest.getStartDate(),campaignAddRequest.getEndDate());
     }
@@ -94,6 +99,8 @@ public class Validate {
     }
 
     public void isValidCampaignDate(Date startDate, Date endDate){
+
+
         Date currentDate = new Date();
         if(currentDate.after(startDate)){
             throw new InvalidFormatException("Ngày bắt đầu chiến dịch không trước ngày hiện tại");

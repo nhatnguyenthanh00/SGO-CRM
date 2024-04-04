@@ -1,5 +1,8 @@
 package com.example.sgo_crm.controller;
 
+import com.example.sgo_crm.exception.DataSaveException;
+import com.example.sgo_crm.exception.InvalidFormatException;
+import com.example.sgo_crm.exception.UsernameExistsException;
 import com.example.sgo_crm.model.APIResponse;
 import com.example.sgo_crm.model.Campaign;
 import com.example.sgo_crm.request.CampaignAddRequest;
@@ -9,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +38,20 @@ public class CampaignController {
         Campaign campaign = campaignService.addCampaign(campaignAddRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaign).build());
+    }
+
+    @ExceptionHandler(UsernameExistsException.class)
+    public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(DataSaveException.class)
+    public ResponseEntity<?> handleDataSaveException(DataSaveException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<?> handleInvalidFormatException(InvalidFormatException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }

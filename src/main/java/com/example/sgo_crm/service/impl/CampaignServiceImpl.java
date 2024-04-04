@@ -39,6 +39,7 @@ public class CampaignServiceImpl implements CampaignService {
                     .campaignName(campaignAddRequest.getCampaignName())
                     .startDate(campaignAddRequest.getStartDate())
                     .endDate(campaignAddRequest.getEndDate())
+                    .status(-1)
                     .build();
             saveCampaign(campaign);
             return campaign;
