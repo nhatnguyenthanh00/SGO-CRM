@@ -24,6 +24,10 @@ public class Validate {
         isValidFullname(request.getFullname());
         isValidUsername(request.getUsername());
         isValidPassword(request.getPassword());
+
+        if(request.getRoles().isEmpty()) {
+            throw new InvalidFormatException("Role không được để trống");
+        }
     }
 
     public void isValidPhone(String phonenumber) {

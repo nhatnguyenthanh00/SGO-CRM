@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserInfo(String id, UserRequest request) {
 
-        validate.isValidPhone(request.getPhonenumber());
+        validate.isValidData(request);
 
         try {
 
