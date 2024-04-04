@@ -41,6 +41,30 @@ public class CampaignController {
                 .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaign).build());
     }
 
+    @GetMapping("/{campaignId}")
+    public ResponseEntity<?> getDetailCampaign(@PathVariable Long campaignId) {
+        Campaign campaign = campaignService.getCampaign(campaignId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(APIResponse.builder().statusCode(200).message("Thông tin chi tiết chiến dịch").data(campaign).build());
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getCampaigns() {
+        List<Campaign> campaigns = campaignService.getCampaigns();
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Thành công lấy danh sách chiến dịch")
+                .data(campaigns).build();
+
+        if(campaigns.isEmpty()) {
+            apiResponse.setMessage("Danh sách chiến dịch rỗng");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiResponse);
+    }
+
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

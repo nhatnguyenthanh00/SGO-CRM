@@ -9,13 +9,13 @@ import com.example.sgo_crm.request.CampaignAddRequest;
 import com.example.sgo_crm.service.CampaignService;
 import com.example.sgo_crm.util.AppConstants;
 import com.example.sgo_crm.util.Validate;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
@@ -64,5 +64,15 @@ public class CampaignServiceImpl implements CampaignService {
         catch (ParseException e){
             throw new InvalidFormatException(AppConstants.DATE_IS_INVALID);
         }
+    }
+
+    @Override
+    public Campaign getCampaign(Long id) {
+        return campaignRepository.getCampaignByCampaignId(id).get();
+    }
+
+    @Override
+    public List<Campaign> getCampaigns() {
+        return campaignRepository.findAll();
     }
 }
