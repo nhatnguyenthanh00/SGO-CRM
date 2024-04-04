@@ -38,7 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/v1/users/search").permitAll()
                         .requestMatchers("/api/v1/role/**").permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll()
-                        .requestMatchers("/api/v1/campaigns/**").permitAll())
+                        .requestMatchers("/api/v1/campaigns/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

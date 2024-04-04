@@ -7,4 +7,6 @@ public interface CampaignService {
     void saveCampaign(Campaign campaign);
 
     Campaign addCampaign(CampaignAddRequest campaignAddRequest);
+
+    Campaign getCampain(Long id);
 }
