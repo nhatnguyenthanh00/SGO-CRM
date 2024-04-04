@@ -97,7 +97,7 @@ public class Validate {
 
 
         Date currentDate = new Date();
-        if(currentDate.before(startDate)){
+        if(currentDate.after(startDate)){
             throw new InvalidFormatException("Ngày bắt đầu chiến dịch không trước ngày hiện tại");
         }
         if(!endDate.after(startDate)){
