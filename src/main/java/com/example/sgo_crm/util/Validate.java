@@ -1,9 +1,11 @@
 package com.example.sgo_crm.util;
 
 import com.example.sgo_crm.exception.InvalidFormatException;
+import com.example.sgo_crm.request.CampaignAddRequest;
 import com.example.sgo_crm.request.UserRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.regex.Pattern;
 
 @Component
@@ -22,6 +24,10 @@ public class Validate {
         isValidFullname(request.getFullname());
         isValidUsername(request.getUsername());
         isValidPassword(request.getPassword());
+
+        if(request.getRoles().isEmpty()) {
+            throw new InvalidFormatException("Role không được để trống");
+        }
     }
 
     public void isValidPhone(String phonenumber) {
@@ -73,6 +79,33 @@ public class Validate {
 
         if(!Pattern.compile(PASSWORD_REGEX).matcher(password).matches()) {
             throw new InvalidFormatException("Password không được chứa khoảng trắng");
+        }
+    }
+
+    public void isValidData(String campaignName, Date startDate, Date endDate){
+        isValidCampaignName(campaignName);
+        isValidCampaignDate(startDate,endDate);
+    }
+
+    public void isValidCampaignName(String campaignName) {
+        if(campaignName.isEmpty()) {
+            throw new InvalidFormatException("Tên chiến dịch không được để trống");
+        }
+
+        if(!Pattern.compile(FULLNAME_REGEX).matcher(campaignName).matches()) {
+            throw new InvalidFormatException("Tên chiến dịch không chứa ký tự đặc biệt");
+        }
+    }
+
+    public void isValidCampaignDate(Date startDate, Date endDate){
+
+
+        Date currentDate = new Date();
+        if(currentDate.after(startDate)){
+            throw new InvalidFormatException("Ngày bắt đầu chiến dịch không trước ngày hiện tại");
+        }
+        if(!endDate.after(startDate)){
+            throw new InvalidFormatException("Ngày kết thúc chiến dịch phải sau ngày bắt đầu chiến dịch");
         }
     }
 

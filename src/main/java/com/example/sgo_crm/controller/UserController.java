@@ -9,12 +9,14 @@ import com.example.sgo_crm.request.UserRequest;
 import com.example.sgo_crm.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -33,16 +35,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
     }
 
+
     @GetMapping("/search")
     public ResponseEntity<?> findUser(@RequestParam(value = "id", required = false) String userId,
                                       @RequestParam(value = "name", required = false) String name,
-                                      @RequestParam(value = "role", required = false) String role){
-        List<User> users = userService.findUser(userId,name,role);
+                                      @RequestParam(value = "role", required = false) String role,
+                                      @RequestParam(defaultValue = "0", required = false) int page){
+        Page<User> users = userService.findUser(userId,name,role, page);
         APIResponse apiResponse = APIResponse.builder()
                 .statusCode(200)
                 .message("Tìm kiếm thành công")
-                .data(users).build();
-        if(users.isEmpty()) {
+                .data(users.getContent()).build();
+        if(users.getContent().isEmpty()) {
             apiResponse.setMessage("Không có kết quả");
         }
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -55,7 +59,7 @@ public class UserController {
             List<String> errorMessages = result.getAllErrors()
                     .stream()
                     .map(error -> error.getDefaultMessage())
-                    .toList();
+                    .collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
         User user = userService.addUser(request);
@@ -78,12 +82,18 @@ public class UserController {
             List<String> errorMessages = result.getAllErrors()
                     .stream()
                     .map(error -> error.getDefaultMessage())
-                    .toList();
+                    .collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
         User user = userService.updateUserInfo(id, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(APIResponse.builder().statusCode(201).message("Lưu thành công nhân viên").data(user).build());
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id){
+        userService.deleteUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Delete successful.");
     }
 
     @ExceptionHandler(UsernameExistsException.class)
