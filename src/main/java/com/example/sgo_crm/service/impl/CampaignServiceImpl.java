@@ -87,4 +87,11 @@ public class CampaignServiceImpl implements CampaignService {
         return campaignRepository.findCampaignsByCampaignIdAndCampaignName(id, name, pageable);
     }
 
+    @Override
+    public Page<Campaign> filterCampaigns(int status, int page) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return campaignRepository.filterCampaignsByStatus(status, pageable);
+    }
+
 }

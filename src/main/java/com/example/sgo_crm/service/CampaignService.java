@@ -16,4 +16,6 @@ public interface CampaignService {
     Page<Campaign> getCampaigns(int page);
 
     Page<Campaign> findCampaigns(Long id, String name,int page);
+
+    Page<Campaign> filterCampaigns(int status, int page);
 }
