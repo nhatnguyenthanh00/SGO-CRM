@@ -3,6 +3,8 @@ package com.example.sgo_crm.controller;
 import com.example.sgo_crm.exception.DataSaveException;
 import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.exception.UsernameExistsException;
+import com.example.sgo_crm.model.APIResponse;
+import com.example.sgo_crm.model.User;
 import com.example.sgo_crm.request.UserRequest;
 import com.example.sgo_crm.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -35,13 +37,16 @@ public class UserController {
                     .toList();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
-        userService.addUser(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Lưu thành công nhân viên");
+        User user = userService.addUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.builder().statusCode(201).message("Lưu thành công nhân viên").data(user).build());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable String id) {
-        return ResponseEntity.ok().body(userService.getUserById(id));
+        User user = userService.getUserById(id);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.builder().statusCode(200).message("Lưu thành công nhân viên").data(user).build());
     }
 
     @PatchMapping("/{id}")
@@ -55,8 +60,9 @@ public class UserController {
                     .toList();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
-        userService.updateUserInfo(id, request);
-        return ResponseEntity.status(HttpStatus.OK).body("Lưu thành công nhân viên");
+        User user = userService.updateUserInfo(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.builder().statusCode(201).message("Lưu thành công nhân viên").data(user).build());
     }
 
     @ExceptionHandler(UsernameExistsException.class)
