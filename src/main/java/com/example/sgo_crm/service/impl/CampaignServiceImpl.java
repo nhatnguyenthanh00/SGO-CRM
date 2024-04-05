@@ -26,7 +26,7 @@ public class CampaignServiceImpl implements CampaignService {
 
     private final Validate validate;
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     @Autowired
     public CampaignServiceImpl(CampaignRepository campaignRepository, Validate validate){
@@ -81,10 +81,17 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public Page<Campaign> findCampaigns(int page) {
+    public Page<Campaign> findCampaigns(Long id, String name, int page) {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize);
-        return null;
+        return campaignRepository.findCampaignsByCampaignIdAndCampaignName(id, name, pageable);
+    }
+
+    @Override
+    public Page<Campaign> filterCampaigns(int status, int page) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return campaignRepository.filterCampaignsByStatus(status, pageable);
     }
 
 //    public void deleteCampaign(Long id){

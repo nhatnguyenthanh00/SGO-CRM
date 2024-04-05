@@ -66,11 +66,23 @@ public class CampaignController {
                 .body(apiResponse);
     }
 
-//    @DeleteMapping(value = "/{id}")
-//    public ResponseEntity<?> deleteCampaign(@PathVariable Long id){
-//        campaignService.deleteCampaign(id);
-//        return ResponseEntity.status(HttpStatus.OK).body("Delete campaign successful.");
-//    }
+    @GetMapping("/filter")
+    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) int status,
+                                             @RequestParam(defaultValue = "0", required = false) int page) {
+        Page<Campaign> campaigns = campaignService.filterCampaigns(status, page);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Danh sách chiến dịch")
+                .data(campaigns.getContent()).build();
+
+        if(campaigns.getContent().isEmpty()) {
+            apiResponse.setMessage("Danh sách chiến dịch rỗng");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiResponse);
+    }
 
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {
