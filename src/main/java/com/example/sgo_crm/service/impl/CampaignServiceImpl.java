@@ -41,11 +41,16 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public Campaign addCampaign(CampaignAddRequest campaignAddRequest) {
+        Date startDate = new Date();
+        Date endDate = new Date();
         try {
             dateFormat.setLenient(false);
-            Date startDate = dateFormat.parse(campaignAddRequest.getStartDate());
-            Date endDate = dateFormat.parse(campaignAddRequest.getEndDate());
-
+            startDate = dateFormat.parse(campaignAddRequest.getStartDate());
+            endDate = dateFormat.parse(campaignAddRequest.getEndDate());
+        }
+        catch (ParseException e){
+            throw new InvalidFormatException(AppConstants.DATE_IS_INVALID);
+        }
             validate.isValidData(campaignAddRequest.getCampaignName(),startDate,endDate);
             if (campaignRepository.findCampaignByCampaignName(campaignAddRequest.getCampaignName()) != null) {
                 throw new UsernameExistsException(AppConstants.CAMPAIGNNAME_IS_ALREADY_EXIST);
@@ -62,10 +67,36 @@ public class CampaignServiceImpl implements CampaignService {
             } catch (DataSaveException e) {
                 throw new DataSaveException(AppConstants.ERROR_SAVING);
             }
+    }
+
+    @Override
+    public Campaign updateCampaign(Long id, CampaignAddRequest campaignAddRequest){
+        Date startDate = new Date();
+        Date endDate = new Date();
+        try {
+            dateFormat.setLenient(false);
+            startDate = dateFormat.parse(campaignAddRequest.getStartDate());
+            endDate = dateFormat.parse(campaignAddRequest.getEndDate());
         }
         catch (ParseException e){
             throw new InvalidFormatException(AppConstants.DATE_IS_INVALID);
         }
+            validate.isValidData(campaignAddRequest.getCampaignName(),startDate,endDate);
+            if(campaignRepository.findCampaignByCampaignName(campaignAddRequest.getCampaignName()).getCampaignId()!=id){
+                throw new UsernameExistsException(AppConstants.CAMPAIGNNAME_IS_ALREADY_EXIST);
+            }
+            try {
+                Campaign campaign = campaignRepository.findById(id).get();
+                if(campaign == null) return null;
+                campaign.setCampaignName(campaignAddRequest.getCampaignName());
+                campaign.setStatus(campaignAddRequest.getStatus());
+                campaign.setStartDate(startDate);
+                campaign.setEndDate(endDate);
+                saveCampaign(campaign);
+                return campaign;
+            } catch (DataSaveException e) {
+                throw new DataSaveException(AppConstants.ERROR_SAVING);
+            }
     }
 
     @Override
