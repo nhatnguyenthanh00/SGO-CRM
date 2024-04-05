@@ -2,6 +2,7 @@ package com.example.sgo_crm.service.impl;
 
 import com.example.sgo_crm.DTO.UserDTO;
 import com.example.sgo_crm.exception.DataSaveException;
+import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.exception.UsernameExistsException;
 import com.example.sgo_crm.model.APIResponse;
 import com.example.sgo_crm.model.Role;
@@ -64,7 +65,11 @@ public class UserServiceImpl implements UserService {
 
             Set<Role> roleSet = new HashSet<>();
             for(String role: request.getRoles()) {
-                roleSet.add(roleService.findByRoleName(role));
+
+                Role roleF = roleService.findByRoleName(role)
+                        .orElseThrow(() -> new InvalidFormatException("Role không hợp lệ"));
+
+                roleSet.add(roleF);
             }
 
             User user = User.builder()
@@ -124,7 +129,10 @@ public class UserServiceImpl implements UserService {
             // update role
             Set<Role> roleSet = new HashSet<>();
             for(String role: request.getRoles()) {
-                roleSet.add(roleService.findByRoleName(role));
+                Role roleF = roleService.findByRoleName(role)
+                        .orElseThrow(() -> new InvalidFormatException("Role không hợp lệ"));
+
+                roleSet.add(roleF);
             }
 
             user.setRoles(roleSet);
