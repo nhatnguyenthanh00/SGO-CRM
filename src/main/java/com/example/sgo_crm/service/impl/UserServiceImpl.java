@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
             Set<Role> roleSet = new HashSet<>();
             for(String role: request.getRoles()) {
 
-                Role roleF = roleService.findByRoleName(role)
+                Role roleF = roleService.findByRoleName(role.trim())
                         .orElseThrow(() -> new InvalidFormatException("Role không hợp lệ"));
 
                 roleSet.add(roleF);
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
             // update role
             Set<Role> roleSet = new HashSet<>();
             for(String role: request.getRoles()) {
-                Role roleF = roleService.findByRoleName(role)
+                Role roleF = roleService.findByRoleName(role.trim())
                         .orElseThrow(() -> new InvalidFormatException("Role không hợp lệ"));
 
                 roleSet.add(roleF);
