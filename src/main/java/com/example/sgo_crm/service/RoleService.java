@@ -4,10 +4,11 @@ import com.example.sgo_crm.DTO.RoleDTO;
 import com.example.sgo_crm.model.Role;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoleService {
 
-    Role findByRoleName(String rolename);
+    Optional<Role> findByRoleName(String rolename);
 
 //    List<RoleDTO> getAllRoleDTO();
 
