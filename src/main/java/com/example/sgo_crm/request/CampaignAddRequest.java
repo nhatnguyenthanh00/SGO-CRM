@@ -13,4 +13,5 @@ public class CampaignAddRequest {
     private String campaignName;
     private String startDate;
     private String endDate;
+    private int status = -1;
 }

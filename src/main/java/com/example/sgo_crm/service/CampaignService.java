@@ -11,6 +11,8 @@ public interface CampaignService {
 
     Campaign addCampaign(CampaignAddRequest campaignAddRequest);
 
+    Campaign updateCampaign(Long id,CampaignAddRequest campaignAddRequest);
+
     Campaign getCampaign(Long id);
 
     Page<Campaign> getCampaigns(int page);

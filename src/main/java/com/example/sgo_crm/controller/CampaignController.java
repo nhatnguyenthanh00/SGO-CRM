@@ -90,6 +90,22 @@ public class CampaignController {
         return ResponseEntity.status(HttpStatus.OK).body("Delete campaign successful.");
     }
 
+    @PatchMapping(value = "/{id}/update")
+    public ResponseEntity<?> updateCampaign(@PathVariable Long id,@Valid @RequestBody CampaignAddRequest campaignAddRequest,
+                                         BindingResult result){
+        if(result.hasErrors()) {
+            List<String> errorMessages = result.getAllErrors()
+                    .stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
+        }
+        Campaign campaign = campaignService.updateCampaign(id,campaignAddRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.builder().statusCode(201).message("Sửa thành công chiến dịch").data(campaign).build());
+    }
+
+
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
