@@ -24,6 +24,10 @@ public class Validate {
         isValidFullname(request.getFullname());
         isValidUsername(request.getUsername());
         isValidPassword(request.getPassword());
+
+        if(request.getRoles().isEmpty()) {
+            throw new InvalidFormatException("Role không được để trống");
+        }
     }
 
     public void isValidPhone(String phonenumber) {
@@ -78,14 +82,9 @@ public class Validate {
         }
     }
 
-    public void isValidData(CampaignAddRequest campaignAddRequest){
-        System.out.println(campaignAddRequest.getStartDate());
-        System.out.println(campaignAddRequest.getEndDate());
-        if (!(campaignAddRequest.getStartDate() instanceof Date) || !(campaignAddRequest.getEndDate() instanceof Date)) {
-            throw new InvalidFormatException("Ngày bắt đầu hoặc ngày kết thúc chiến dịch không hợp lệ");
-        }
-        isValidCampaignName(campaignAddRequest.getCampaignName());
-        isValidCampaignDate(campaignAddRequest.getStartDate(),campaignAddRequest.getEndDate());
+    public void isValidData(String campaignName, Date startDate, Date endDate){
+        isValidCampaignName(campaignName);
+        isValidCampaignDate(startDate,endDate);
     }
 
     public void isValidCampaignName(String campaignName) {

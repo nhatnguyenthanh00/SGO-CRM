@@ -12,6 +12,9 @@ import com.example.sgo_crm.service.UserService;
 import com.example.sgo_crm.util.AppConstants;
 import com.example.sgo_crm.util.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -88,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserInfo(String id, UserRequest request) {
 
-        validate.isValidPhone(request.getPhonenumber());
+        validate.isValidData(request);
 
         try {
 
@@ -141,8 +144,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findUser(String id, String name, String role) {
-        return userRepository.findUser(id, name, role);
+    public Page<User> findUser(String id, String name, String role, int page) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return userRepository.findUser(id.trim(), name.trim(), role.trim(), pageable);
     }
 
     public List<UserDTO> getAllUserDTO(){

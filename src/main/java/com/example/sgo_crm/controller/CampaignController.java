@@ -9,12 +9,14 @@ import com.example.sgo_crm.request.CampaignAddRequest;
 import com.example.sgo_crm.service.impl.CampaignServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/campaigns")
@@ -32,12 +34,54 @@ public class CampaignController {
             List<String> errorMessages = result.getAllErrors()
                     .stream()
                     .map(error -> error.getDefaultMessage())
-                    .toList();
+                    .collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
         Campaign campaign = campaignService.addCampaign(campaignAddRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaign).build());
+    }
+
+    @GetMapping("/{campaignId}")
+    public ResponseEntity<?> getDetailCampaign(@PathVariable Long campaignId) {
+        Campaign campaign = campaignService.getCampaign(campaignId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(APIResponse.builder().statusCode(200).message("Thông tin chi tiết chiến dịch").data(campaign).build());
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getCampaigns(@RequestParam(defaultValue = "0", required = false) int page) {
+        Page<Campaign> campaigns = campaignService.getCampaigns(page);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Thành công lấy danh sách chiến dịch")
+                .data(campaigns.getContent()).build();
+
+        if(campaigns.getContent().isEmpty()) {
+            apiResponse.setMessage("Danh sách chiến dịch rỗng");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiResponse);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) int status,
+                                             @RequestParam(defaultValue = "0", required = false) int page) {
+        Page<Campaign> campaigns = campaignService.filterCampaigns(status, page);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Danh sách chiến dịch")
+                .data(campaigns.getContent()).build();
+
+        if(campaigns.getContent().isEmpty()) {
+            apiResponse.setMessage("Danh sách chiến dịch rỗng");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiResponse);
     }
 
     @ExceptionHandler(UsernameExistsException.class)
