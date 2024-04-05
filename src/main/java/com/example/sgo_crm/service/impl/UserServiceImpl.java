@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
     public Page<User> findUser(String id, String name, String role, int page) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(page, pageSize);
-        return userRepository.findUser(id, name, role, pageable);
+        return userRepository.findUser(id.trim(), name.trim(), role.trim(), pageable);
     }
 
     public List<UserDTO> getAllUserDTO(){
