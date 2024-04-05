@@ -35,12 +35,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
     }
 
-
     @GetMapping("/search")
     public ResponseEntity<?> findUser(@RequestParam(value = "id", required = false) String userId,
                                       @RequestParam(value = "name", required = false) String name,
                                       @RequestParam(value = "role", required = false) String role,
-                                      @RequestParam(defaultValue = "0", required = false) int page){
+                                      @RequestParam(defaultValue = "1", required = false) int page){
         Page<User> users = userService.findUser(userId,name,role, page);
         APIResponse apiResponse = APIResponse.builder()
                 .statusCode(200)

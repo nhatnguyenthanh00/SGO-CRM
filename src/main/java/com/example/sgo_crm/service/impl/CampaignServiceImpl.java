@@ -108,7 +108,7 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     public Page<Campaign> getCampaigns(int page) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
         return campaignRepository.findAll(pageable);
     }
 
@@ -122,7 +122,7 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     public Page<Campaign> filterCampaigns(int status, int page) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
         return campaignRepository.filterCampaignsByStatus(status, pageable);
     }
 

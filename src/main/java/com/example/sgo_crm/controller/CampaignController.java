@@ -50,7 +50,7 @@ public class CampaignController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCampaigns(@RequestParam(defaultValue = "0", required = false) int page) {
+    public ResponseEntity<?> getCampaigns(@RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.getCampaigns(page);
 
         APIResponse apiResponse = APIResponse.builder()
@@ -68,7 +68,7 @@ public class CampaignController {
 
     @GetMapping("/filter")
     public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) int status,
-                                             @RequestParam(defaultValue = "0", required = false) int page) {
+                                             @RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.filterCampaigns(status, page);
 
         APIResponse apiResponse = APIResponse.builder()

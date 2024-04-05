@@ -19,7 +19,7 @@ public class PageController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getfbAdPages(@RequestParam(defaultValue = "0", required = false) int page) {
+    public ResponseEntity<?> getfbAdPages(@RequestParam(defaultValue = "1", required = false) int page) {
         APIResponse apiResponse = fbAdPageService.getFbAdPages(page);
         return ResponseEntity.ok().body(apiResponse);
     }
