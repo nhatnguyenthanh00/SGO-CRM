@@ -115,7 +115,10 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     public Page<Campaign> findCampaigns(Long id, String name, int page) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        if(id == null && name.equals("")) {
+            return campaignRepository.findAll(pageable);
+        }
         return campaignRepository.findCampaignsByCampaignIdAndCampaignName(id, name.trim(), pageable);
     }
 

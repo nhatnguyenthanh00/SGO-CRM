@@ -42,6 +42,25 @@ public class CampaignController {
                 .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaign).build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> findCampaign(@RequestParam(value = "id", required = false) Long id,
+                                          @RequestParam(value = "name", required = false) String name,
+                                          @RequestParam(defaultValue = "1", required = false) int page) {
+        Page<Campaign> campaigns = campaignService.findCampaigns(id,name,page);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Thành công lấy danh sách chiến dịch")
+                .data(campaigns.getContent()).build();
+
+        if(campaigns.getContent().isEmpty()) {
+            apiResponse.setMessage("Danh sách chiến dịch rỗng");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiResponse);
+    }
+
     @GetMapping("/{campaignId}")
     public ResponseEntity<?> getDetailCampaign(@PathVariable Long campaignId) {
         Campaign campaign = campaignService.getCampaign(campaignId);
