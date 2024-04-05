@@ -97,9 +97,6 @@ public class Validate {
             throw new InvalidFormatException("Tên chiến dịch không được để trống");
         }
 
-        if(!Pattern.compile(FULLNAME_REGEX).matcher(campaignName).matches()) {
-            throw new InvalidFormatException("Tên chiến dịch không chứa ký tự đặc biệt");
-        }
     }
 
     public void isValidCampaignDate(Date startDate, Date endDate){
