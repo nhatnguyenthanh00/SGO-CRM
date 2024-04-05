@@ -82,7 +82,8 @@ public class CampaignServiceImpl implements CampaignService {
             throw new InvalidFormatException(AppConstants.DATE_IS_INVALID);
         }
             validate.isValidData(campaignAddRequest.getCampaignName(),startDate,endDate);
-            if(campaignRepository.findCampaignByCampaignName(campaignAddRequest.getCampaignName()).getCampaignId()!=id){
+            Campaign existedCampaign = campaignRepository.findCampaignByCampaignName(campaignAddRequest.getCampaignName());
+            if(existedCampaign!=null && existedCampaign.getCampaignId()!=id) {
                 throw new UsernameExistsException(AppConstants.CAMPAIGNNAME_IS_ALREADY_EXIST);
             }
             try {

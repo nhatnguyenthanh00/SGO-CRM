@@ -101,8 +101,8 @@ public class CampaignController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
         }
         Campaign campaign = campaignService.updateCampaign(id,campaignAddRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(APIResponse.builder().statusCode(201).message("Sửa thành công chiến dịch").data(campaign).build());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(APIResponse.builder().statusCode(200).message("Sửa thành công chiến dịch").data(campaign).build());
     }
 
 
