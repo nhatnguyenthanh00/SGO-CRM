@@ -80,8 +80,11 @@ public class CampaignServiceImpl implements CampaignService {
         return campaignRepository.findAll(pageable);
     }
 
-    public void deleteCampaign(Long id){
-        campaignRepository.deleteById(id);
+    @Override
+    public Page<Campaign> findCampaigns(int page) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return null;
     }
 
 }
