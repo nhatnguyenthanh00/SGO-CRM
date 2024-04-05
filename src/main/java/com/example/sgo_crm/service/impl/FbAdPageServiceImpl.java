@@ -47,19 +47,19 @@ public class FbAdPageServiceImpl implements FbAdPageService {
     @Override
     public APIResponse getFbAdPages(int page) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
         Page<ListPageDTO> fbAdPages = fbAdPageRepository.getFbAdPagesBy(pageable);
-
-        APIResponse apiResponse = APIResponse.builder()
-                .statusCode(200)
-                .data(fbAdPages.getContent())
-                .build();
 
         for(ListPageDTO listPageDTO:fbAdPages.getContent()) {
             listPageDTO.setNumberOfConversations(
                     getFbAdPageConversations(listPageDTO.getFbAdPageId()).size()
             );
         }
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .data(fbAdPages.getContent())
+                .build();
 
         apiResponse.setMessage(!fbAdPages.getContent().isEmpty() ? "Danh sách tài khoảng quảng cáo" : "Danh sách rỗng");
 

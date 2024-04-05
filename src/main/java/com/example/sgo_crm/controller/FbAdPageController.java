@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/pages")
-public class PageController {
+public class FbAdPageController {
 
     private final FbAdPageServiceImpl fbAdPageService;
 
-    public PageController(FbAdPageServiceImpl fbAdPageService) {
+    public FbAdPageController(FbAdPageServiceImpl fbAdPageService) {
         this.fbAdPageService = fbAdPageService;
     }
 
     @GetMapping()
-    public ResponseEntity<?> getfbAdPages(@RequestParam(defaultValue = "0", required = false) int page) {
+    public ResponseEntity<?> getfbAdPages(@RequestParam(defaultValue = "1", required = false) int page) {
         APIResponse apiResponse = fbAdPageService.getFbAdPages(page);
         return ResponseEntity.ok().body(apiResponse);
     }
