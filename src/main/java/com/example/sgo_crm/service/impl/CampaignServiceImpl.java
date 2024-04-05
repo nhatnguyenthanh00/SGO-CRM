@@ -94,8 +94,8 @@ public class CampaignServiceImpl implements CampaignService {
         return campaignRepository.filterCampaignsByStatus(status, pageable);
     }
 
-//    public void deleteCampaign(Long id){
-//        campaignRepository.deleteById(id);
-//    }
+    public void deleteCampaign(Long id){
+        campaignRepository.deleteById(id);
+    }
 
 }
