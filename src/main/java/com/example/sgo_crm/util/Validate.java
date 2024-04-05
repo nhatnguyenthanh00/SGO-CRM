@@ -5,6 +5,9 @@ import com.example.sgo_crm.request.CampaignAddRequest;
 import com.example.sgo_crm.request.UserRequest;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -18,6 +21,8 @@ public class Validate {
     private static final String USERNAMR_REGEX = "^[a-zA-Z0-9]*$";
 
     private static final String PASSWORD_REGEX = "\\S+$";
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public void isValidData(UserRequest request) {
         isValidPhone(request.getPhonenumber());
@@ -99,8 +104,13 @@ public class Validate {
 
     public void isValidCampaignDate(Date startDate, Date endDate){
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND,0);
 
-        Date currentDate = new Date();
+        Date currentDate = calendar.getTime();
         if(currentDate.after(startDate)){
             throw new InvalidFormatException("Ngày bắt đầu chiến dịch không trước ngày hiện tại");
         }
