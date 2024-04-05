@@ -87,4 +87,8 @@ public class CampaignServiceImpl implements CampaignService {
         return null;
     }
 
+//    public void deleteCampaign(Long id){
+//        campaignRepository.deleteById(id);
+//    }
+
 }

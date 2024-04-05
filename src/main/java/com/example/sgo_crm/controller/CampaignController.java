@@ -66,11 +66,11 @@ public class CampaignController {
                 .body(apiResponse);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteCampaign(@PathVariable Long id){
-        campaignService.deleteCampaign(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Delete campaign successful.");
-    }
+//    @DeleteMapping(value = "/{id}")
+//    public ResponseEntity<?> deleteCampaign(@PathVariable Long id){
+//        campaignService.deleteCampaign(id);
+//        return ResponseEntity.status(HttpStatus.OK).body("Delete campaign successful.");
+//    }
 
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {
