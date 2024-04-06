@@ -126,7 +126,7 @@ public class CampaignController {
 
     @PostMapping(value = "/{campaignId}/add-user")
     public ResponseEntity<?> assignUsersToCampaign(@PathVariable Long campaignId, @RequestBody List<String> userIds) {
-        campaignService.addUsersToCampaign(userIds, campaignId);
+        campaignService.assignUsersToCampaign(userIds, campaignId);
         Campaign campaign = campaignService.getCampaign(campaignId);
         if(campaign == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -144,7 +144,7 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public void addUsersToCampaign(List<String> userIds, Long campaignId) {
+    public void assignUsersToCampaign(List<String> userIds, Long campaignId) {
         Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
         if (campaign != null) {
             List<User> users = userService.findAllById(userIds);
