@@ -22,40 +22,14 @@ public class FbAdPageServiceImpl implements FbAdPageService {
 
     private final FbAdPageRepository fbAdPageRepository;
 
-    private final RestTemplate restTemplate;
-
-    @Value("${facebook.access-token}")
-    private String PAGE_ACCESS_TOKEN;
+    private final FacebookServiceImpl facebookService;
 
     @Autowired
-    public FbAdPageServiceImpl(FbAdPageRepository fbAdPageRepository, RestTemplate restTemplate) {
+    public FbAdPageServiceImpl(FbAdPageRepository fbAdPageRepository, FacebookServiceImpl facebookService) {
         this.fbAdPageRepository = fbAdPageRepository;
-        this.restTemplate = restTemplate;
+        this.facebookService = facebookService;
     }
 
-    private List<ConversationResponse.Data> getFbAdPageConversations(String pageAccessToken, String pageId) {
-        String url = "https://graph.facebook.com/v19.0/" + pageId + "/conversations?access_token=" + pageAccessToken;
-        ConversationResponse response = restTemplate.getForObject(url, ConversationResponse.class);
-
-        List<ConversationResponse.Data> data = null;
-
-        if (response != null && response.getData() != null) {
-            data = response.getData();
-        }
-        return data;
-    }
-
-    private List<FbAdPageResponse.Data> getFbAdPagesOfUser(String userAccessToken) {
-        String pagesUrl = "https://graph.facebook.com/v19.0/me/accounts?fields=id,access_token&access_token=" + userAccessToken;
-        FbAdPageResponse fbAdPageResponse = restTemplate.getForObject(pagesUrl, FbAdPageResponse.class);
-
-        List<FbAdPageResponse.Data> data = null;
-
-        if (fbAdPageResponse != null && fbAdPageResponse.getData() != null) {
-            data = fbAdPageResponse.getData();
-        }
-        return data;
-    }
 
     @Override
     public APIResponse getFbAdPages(String userAccessToken, int page) {
@@ -63,12 +37,12 @@ public class FbAdPageServiceImpl implements FbAdPageService {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         Page<ListPageDTO> fbAdPages = fbAdPageRepository.getFbAdPagesBy(pageable);
 
-        List<FbAdPageResponse.Data> data = getFbAdPagesOfUser(userAccessToken);
+        List<FbAdPageResponse.Data> data = facebookService.getFbAdPagesOfUser(userAccessToken);
         for(FbAdPageResponse.Data fbAdResponse:data) {
             for(ListPageDTO listPageDTO:fbAdPages.getContent()) {
                 if(fbAdResponse.getId().equals(listPageDTO.getFbAdPageId())) {
                     listPageDTO.setNumberOfConversations(
-                        getFbAdPageConversations(fbAdResponse.getAccess_token(), listPageDTO.getFbAdPageId()).size()
+                        facebookService.getFbAdPageConversations(fbAdResponse.getAccess_token(), listPageDTO.getFbAdPageId()).size()
                     );
                 }
             }
@@ -82,5 +56,13 @@ public class FbAdPageServiceImpl implements FbAdPageService {
         apiResponse.setMessage(!fbAdPages.getContent().isEmpty() ? "Danh sách tài khoảng quảng cáo" : "Danh sách rỗng");
 
         return apiResponse;
+    }
+
+    @Override
+    public APIResponse getFbAdPage(String userAccessToken, Long pageId) {
+        return APIResponse.builder()
+                .statusCode(200)
+                .message("Chi tiết page quảng cáo")
+                .data(fbAdPageRepository.getFbAdPageByPageId(pageId)).build();
     }
 }

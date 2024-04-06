@@ -6,4 +6,5 @@ public interface FbAdPageService {
 
     APIResponse getFbAdPages(String userAccessToken, int page);
 
+    APIResponse getFbAdPage(String userAccessToken, Long pageId);
 }
