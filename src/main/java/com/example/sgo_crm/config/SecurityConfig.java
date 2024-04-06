@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -42,15 +43,16 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/v1/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.PATCH,"/api/v1/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/users/search").permitAll()
-                        .requestMatchers("/api/v1/pages/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/pages").authenticated()
                         .requestMatchers("/api/v1/role/**").permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/campaigns/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .oauth2Login(Customizer.withDefaults());
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
