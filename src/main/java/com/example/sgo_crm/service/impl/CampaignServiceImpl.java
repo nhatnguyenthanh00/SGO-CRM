@@ -147,8 +147,8 @@ public class CampaignServiceImpl implements CampaignService {
     public void addUsersToCampaign(List<String> userIds, Long campaignId) {
         Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
         if (campaign != null) {
-//            List<User> users = userRepository.findAllById(userIds);
             List<User> users = userService.findAllById(userIds);
+            campaign.getUsers().clear();
             campaign.getUsers().addAll(users);
             for (User user : users) {
                 user.getCampaigns().add(campaign);

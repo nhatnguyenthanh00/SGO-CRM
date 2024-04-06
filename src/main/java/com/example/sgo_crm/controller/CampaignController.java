@@ -125,7 +125,7 @@ public class CampaignController {
     }
 
     @PostMapping(value = "/{campaignId}/add-user")
-    public ResponseEntity<?> addUsersToCampaign(@PathVariable Long campaignId, @RequestBody List<String> userIds) {
+    public ResponseEntity<?> assignUsersToCampaign(@PathVariable Long campaignId, @RequestBody List<String> userIds) {
         campaignService.addUsersToCampaign(userIds, campaignId);
         Campaign campaign = campaignService.getCampaign(campaignId);
         if(campaign == null)
