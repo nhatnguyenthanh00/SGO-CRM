@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/all")
-    public ResponseEntity<?> getAllUser(){
+    public ResponseEntity<?> getAllUser() {
 
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
     }
@@ -39,13 +39,13 @@ public class UserController {
     public ResponseEntity<?> findUser(@RequestParam(value = "id", required = false) String userId,
                                       @RequestParam(value = "name", required = false) String name,
                                       @RequestParam(value = "role", required = false) String role,
-                                      @RequestParam(defaultValue = "1", required = false) int page){
-        Page<User> users = userService.findUser(userId,name,role, page);
+                                      @RequestParam(defaultValue = "1", required = false) int page) {
+        Page<User> users = userService.findUser(userId, name, role, page);
         APIResponse apiResponse = APIResponse.builder()
                 .statusCode(200)
                 .message("Tìm kiếm thành công")
                 .data(users.getContent()).build();
-        if(users.getContent().isEmpty()) {
+        if (users.getContent().isEmpty()) {
             apiResponse.setMessage("Không có kết quả");
         }
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -54,7 +54,7 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<?> addUser(@Valid @RequestBody UserRequest request,
                                      BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             List<String> errorMessages = result.getAllErrors()
                     .stream()
                     .map(error -> error.getDefaultMessage())
@@ -77,7 +77,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable String id,
                                         @Valid @RequestBody UserRequest request,
                                         BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             List<String> errorMessages = result.getAllErrors()
                     .stream()
                     .map(error -> error.getDefaultMessage())
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id){
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
         userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body("Delete user successful.");
     }

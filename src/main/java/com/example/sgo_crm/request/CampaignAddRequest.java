@@ -11,7 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class CampaignAddRequest {
     private String campaignName;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private String startDate;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private String endDate;
     private int status = -1;
 }

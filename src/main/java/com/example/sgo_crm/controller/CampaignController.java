@@ -39,7 +39,7 @@ public class CampaignController {
         }
         Campaign campaign = campaignService.addCampaign(campaignAddRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaign).build());
+                .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaignAddRequest).build());
     }
 
     @GetMapping("/search")
@@ -121,10 +121,10 @@ public class CampaignController {
         }
         Campaign campaign = campaignService.updateCampaign(id,campaignAddRequest);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(APIResponse.builder().statusCode(200).message("Sửa thành công chiến dịch").data(campaign).build());
+                .body(APIResponse.builder().statusCode(200).message("Sửa thành công chiến dịch").data(campaignAddRequest).build());
     }
 
-    @PostMapping(value = "/{campaignId}/add-user")
+    @PostMapping(value = "/{campaignId}/assign-user")
     public ResponseEntity<?> assignUsersToCampaign(@PathVariable Long campaignId, @RequestBody List<String> userIds) {
         campaignService.assignUsersToCampaign(userIds, campaignId);
         Campaign campaign = campaignService.getCampaign(campaignId);
@@ -132,7 +132,7 @@ public class CampaignController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(APIResponse.builder().statusCode(400).message("Chiến dịch không tồn tại"));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(APIResponse.builder().statusCode(201).message("Thêm thành công nhân viên vào chiến dịch").data(campaignService.getAllUserByCampaign(campaignId)).build());
+                .body(APIResponse.builder().statusCode(201).message("Gán thành công nhân viên vào chiến dịch").data(campaignService.getAllUserByCampaign(campaignId)).build());
     }
 
 
