@@ -177,6 +177,25 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public Page<User> getUsers(int page){
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<User> users = userRepository.findAll(pageable);
+        return userRepository.findAll(pageable);
+    }
+
+    public Page<UserDTO> getUsersDTO(int page) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<User> usersPage = userRepository.findAll(pageable);
+
+        // Sử dụng map để chuyển đổi Page<User> thành Page<UserDTO>
+        Page<UserDTO> usersDTOPage = usersPage.map(this::changeToDTO);
+
+        return usersDTOPage;
+    }
+
     public List<UserDTO> changeToDTO(List<User> userList){
         List<UserDTO> userDTOList = new ArrayList<>();
         for(User user : userList){

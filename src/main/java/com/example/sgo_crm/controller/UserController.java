@@ -1,5 +1,6 @@
 package com.example.sgo_crm.controller;
 
+import com.example.sgo_crm.DTO.UserDTO;
 import com.example.sgo_crm.exception.DataSaveException;
 import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.exception.UsernameExistsException;
@@ -29,10 +30,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/all")
-    public ResponseEntity<?> getAllUser() {
+//    @GetMapping(value = "/all")
+//    public ResponseEntity<?> getAllUser() {
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
+//    }
 
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUserDTO());
+    @GetMapping(value = "/all")
+    public ResponseEntity<?> getUsers(@RequestParam(defaultValue = "1", required = false) int page){
+        Page<UserDTO> users = userService.getUsersDTO(page);
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Thành công lấy danh sách user")
+                .data(users.getContent()).build();
+        if(users.getContent().isEmpty()) {
+            apiResponse.setMessage("Danh sách user rỗng");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiResponse);
     }
 
     @GetMapping("/search")
