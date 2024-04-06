@@ -21,4 +21,6 @@ public interface CampaignService {
     Page<Campaign> findCampaigns(Long id, String name,int page);
 
     Page<Campaign> filterCampaigns(int status, int page);
+
+    void addUsersToCampaign(List<String> userIds, Long campaignId);
 }
