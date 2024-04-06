@@ -105,6 +105,17 @@ public class CampaignController {
                 .body(APIResponse.builder().statusCode(200).message("Sửa thành công chiến dịch").data(campaign).build());
     }
 
+    @PostMapping(value = "/{campaignId}/add-user")
+    public ResponseEntity<?> addUsersToCampaign(@PathVariable Long campaignId, @RequestBody List<String> userIds) {
+        campaignService.addUsersToCampaign(userIds, campaignId);
+        Campaign campaign = campaignService.getCampaign(campaignId);
+        if(campaign == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(APIResponse.builder().statusCode(400).message("Chiến dịch không tồn tại"));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.builder().statusCode(201).message("Thêm thành công nhân viên vào chiến dịch").data(campaignService.getAllUserByCampaign(campaignId)).build());
+    }
+
 
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {

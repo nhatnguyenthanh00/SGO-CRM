@@ -151,6 +151,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    public List<User> findAllById(List<String> userIds) {
+        return userRepository.findAllById(userIds);
+    }
+
     @Override
     public Page<User> findUser(String id, String name, String role, int page) {
         int pageSize = 10;
@@ -160,18 +164,30 @@ public class UserServiceImpl implements UserService {
 
     public List<UserDTO> getAllUserDTO(){
         List<User> userList = userRepository.findAll();
-        List<UserDTO> userDTOList = new ArrayList<>();
-        for(User user : userList){
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUserId(user.getUserId());
-            userDTO.setFullname(user.getFullname());
-            userDTO.setRoles(user.getRoles());
-            userDTOList.add(userDTO);
-        }
+        List<UserDTO> userDTOList = changeToDTO(userList);
         return userDTOList;
     }
 
     public void deleteUserById(String id){
         userRepository.deleteById(id);
     }
+
+    public List<UserDTO> changeToDTO(List<User> userList){
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for(User user : userList){
+            UserDTO userDTO = changeToDTO(user);
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
+    }
+
+    public UserDTO changeToDTO(User user){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setFullname(user.getFullname());
+        userDTO.setRoles(user.getRoles());
+        return userDTO;
+    }
+
+
 }

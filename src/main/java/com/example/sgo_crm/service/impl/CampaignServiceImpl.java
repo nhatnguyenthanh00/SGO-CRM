@@ -1,10 +1,13 @@
 package com.example.sgo_crm.service.impl;
 
+import com.example.sgo_crm.DTO.UserDTO;
 import com.example.sgo_crm.exception.DataSaveException;
 import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.exception.UsernameExistsException;
 import com.example.sgo_crm.model.Campaign;
+import com.example.sgo_crm.model.User;
 import com.example.sgo_crm.repository.CampaignRepository;
+import com.example.sgo_crm.repository.UserRepository;
 import com.example.sgo_crm.request.CampaignAddRequest;
 import com.example.sgo_crm.service.CampaignService;
 import com.example.sgo_crm.util.AppConstants;
@@ -18,19 +21,26 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
 
     private  final CampaignRepository campaignRepository;
 
+
+    private final UserServiceImpl userService;
+
     private final Validate validate;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     @Autowired
-    public CampaignServiceImpl(CampaignRepository campaignRepository, Validate validate){
+    public CampaignServiceImpl(CampaignRepository campaignRepository, UserServiceImpl userService, Validate validate){
         this.campaignRepository = campaignRepository;
+        this.userService = userService;
         this.validate = validate;
     }
 
@@ -128,6 +138,32 @@ public class CampaignServiceImpl implements CampaignService {
 
     public void deleteCampaign(Long id){
         campaignRepository.deleteById(id);
+    }
+
+    @Override
+    public void addUsersToCampaign(List<String> userIds, Long campaignId) {
+        Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
+        if (campaign != null) {
+//            List<User> users = userRepository.findAllById(userIds);
+            List<User> users = userService.findAllById(userIds);
+            campaign.getUsers().addAll(users);
+            for (User user : users) {
+                user.getCampaigns().add(campaign);
+            }
+            campaignRepository.save(campaign);
+        }
+    }
+
+    public Set<UserDTO> getAllUserByCampaign(Long campaignId){
+        Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
+        if(campaign == null) return null;
+        Set<User> users = campaign.getUsers();
+        Set<UserDTO> userDTOSet = new HashSet<>();
+        for(User user : users){
+            UserDTO userDTO = userService.changeToDTO(user);
+            userDTOSet.add(userDTO);
+        }
+        return userDTOSet;
     }
 
 }
