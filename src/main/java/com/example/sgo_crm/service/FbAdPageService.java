@@ -4,6 +4,6 @@ import com.example.sgo_crm.model.APIResponse;
 
 public interface FbAdPageService {
 
-    APIResponse getFbAdPages(int page);
+    APIResponse getFbAdPages(String userAccessToken, int page);
 
 }
