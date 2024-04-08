@@ -142,10 +142,18 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public Page<Campaign> filterCampaigns(int status, int page) {
+    public Page<Campaign> filterCampaigns(String status, int page) {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return campaignRepository.filterCampaignsByStatus(status, pageable);
+
+        int stt = 0;
+        try {
+            stt = Integer.parseInt(status);
+        }catch (NumberFormatException e) {
+            throw new InvalidFormatException("Trạng thái không hợp lệ");
+        }
+
+        return campaignRepository.filterCampaignsByStatus(stt, pageable);
     }
 
     public void deleteCampaign(Long id) {

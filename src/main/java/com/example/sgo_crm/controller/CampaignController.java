@@ -86,7 +86,7 @@ public class CampaignController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) int status,
+    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) String status,
                                              @RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.filterCampaigns(status, page);
 
