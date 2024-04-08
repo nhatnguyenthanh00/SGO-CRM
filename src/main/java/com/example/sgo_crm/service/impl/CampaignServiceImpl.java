@@ -141,6 +141,10 @@ public class CampaignServiceImpl implements CampaignService {
         campaignRepository.deleteById(id);
     }
 
+    public List<Campaign> findAllById(List<Long> campaignIds) {
+        return campaignRepository.findAllById(campaignIds);
+    }
+
     @Override
     public void assignUsersToCampaign(List<String> userIds, Long campaignId) {
         Campaign campaign = campaignRepository.findById(campaignId).orElse(null);
@@ -152,6 +156,19 @@ public class CampaignServiceImpl implements CampaignService {
                 user.getCampaigns().add(campaign);
             }
             campaignRepository.save(campaign);
+        }
+    }
+
+    public void assignCampaignsToUser(List<Long> campaignIds, String userId) {
+        User user = userService.getUserById(userId);
+        if (user != null) {
+            List<Campaign> campaigns = campaignRepository.findAllById(campaignIds);
+            user.getCampaigns().clear();
+            user.getCampaigns().addAll(campaigns);
+            for (Campaign campaign : campaigns) {
+                campaign.getUsers().add(user);
+            }
+            userService.save(user);
         }
     }
 

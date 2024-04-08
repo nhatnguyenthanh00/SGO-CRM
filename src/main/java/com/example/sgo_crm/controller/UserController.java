@@ -5,8 +5,10 @@ import com.example.sgo_crm.exception.DataSaveException;
 import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.exception.UsernameExistsException;
 import com.example.sgo_crm.model.APIResponse;
+import com.example.sgo_crm.model.Campaign;
 import com.example.sgo_crm.model.User;
 import com.example.sgo_crm.request.UserRequest;
+import com.example.sgo_crm.service.impl.CampaignServiceImpl;
 import com.example.sgo_crm.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +26,12 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserServiceImpl userService;
+    private final CampaignServiceImpl campaignService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserServiceImpl userService, CampaignServiceImpl campaignService) {
         this.userService = userService;
+        this.campaignService = campaignService;
     }
 
 //    @GetMapping(value = "/all")
@@ -109,6 +113,17 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
         userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body("Delete user successful.");
+    }
+
+    @PostMapping(value = "/{userId}/assign-campaign")
+    public ResponseEntity<?> assignCampaignsToUser(@PathVariable String userId, @RequestBody List<Long> campaignIds) {
+        campaignService.assignCampaignsToUser(campaignIds,userId);
+        User user = userService.getUserById(userId);
+        if(user == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(APIResponse.builder().statusCode(400).message("User không tồn tại"));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.builder().statusCode(201).message("Gán thành công chiến dịch cho nhân viên").data(campaignIds).build());
     }
 
     @ExceptionHandler(UsernameExistsException.class)

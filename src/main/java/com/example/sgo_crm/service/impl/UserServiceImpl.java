@@ -5,6 +5,7 @@ import com.example.sgo_crm.exception.DataSaveException;
 import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.exception.UsernameExistsException;
 import com.example.sgo_crm.model.APIResponse;
+import com.example.sgo_crm.model.Campaign;
 import com.example.sgo_crm.model.Role;
 import com.example.sgo_crm.model.User;
 import com.example.sgo_crm.repository.UserRepository;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleServiceImpl roleService;
+
 
     private final Validate validate;
 
@@ -176,6 +178,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(String id){
         userRepository.deleteById(id);
     }
+
 
     @Override
     public Page<User> getUsers(int page){
