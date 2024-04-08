@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
@@ -146,14 +143,19 @@ public class CampaignServiceImpl implements CampaignService {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
 
-        int stt = 0;
+        int parsedStatus;
         try {
-            stt = Integer.parseInt(status);
-        }catch (NumberFormatException e) {
-            throw new InvalidFormatException("Trạng thái không hợp lệ");
+            parsedStatus = Integer.parseInt(status);
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException(AppConstants.STATUS_IS_INVALID);
         }
 
-        return campaignRepository.filterCampaignsByStatus(stt, pageable);
+        // Check if the status is one of the accepted values
+        if (!Arrays.asList(-1, 0, 1).contains(parsedStatus)) {
+            throw new InvalidFormatException(AppConstants.STATUS_IS_INVALID);
+        }
+
+        return campaignRepository.filterCampaignsByStatus(parsedStatus, pageable);
     }
 
     public void deleteCampaign(Long id) {
