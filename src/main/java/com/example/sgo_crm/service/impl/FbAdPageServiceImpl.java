@@ -3,6 +3,7 @@ package com.example.sgo_crm.service.impl;
 import com.example.sgo_crm.DTO.ListPageDTO;
 import com.example.sgo_crm.model.APIResponse;
 import com.example.sgo_crm.model.ConversationResponse;
+import com.example.sgo_crm.model.FbAdAccountResponse;
 import com.example.sgo_crm.model.FbAdPageResponse;
 import org.springframework.web.client.RestTemplate;
 import com.example.sgo_crm.repository.FbAdPageRepository;
@@ -60,9 +61,12 @@ public class FbAdPageServiceImpl implements FbAdPageService {
 
     @Override
     public APIResponse getFbAdPage(String userAccessToken, Long pageId) {
+
+        List<FbAdAccountResponse.Data> data = facebookService.getFbAdAccountsOfUser(userAccessToken);
+        //fbAdPageRepository.getFbAdPageByPageId(pageId)
         return APIResponse.builder()
                 .statusCode(200)
                 .message("Chi tiết page quảng cáo")
-                .data(fbAdPageRepository.getFbAdPageByPageId(pageId)).build();
+                .data(data).build();
     }
 }

@@ -29,11 +29,11 @@ public class FbAdPageController {
     }
 
     @GetMapping("/{pageId}")
-    public ResponseEntity<?> getfbAdPage(@PathVariable Long pageId) {
+    public ResponseEntity<?> getfbAdPageByPageId(@RegisteredOAuth2AuthorizedClient("facebook") OAuth2AuthorizedClient authorizedClient,
+                                                 @PathVariable Long pageId) {
 
         // lay user access token
-        //String userAccessToken = authorizedClient.getAccessToken().getTokenValue().toString();
-        String userAccessToken = "";
+        String userAccessToken = authorizedClient.getAccessToken().getTokenValue().toString();
         APIResponse apiResponse = fbAdPageService.getFbAdPage(userAccessToken, pageId);
         return ResponseEntity.ok().body(apiResponse);
     }

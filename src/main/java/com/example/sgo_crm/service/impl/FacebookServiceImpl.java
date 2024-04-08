@@ -1,6 +1,7 @@
 package com.example.sgo_crm.service.impl;
 
 import com.example.sgo_crm.model.ConversationResponse;
+import com.example.sgo_crm.model.FbAdAccountResponse;
 import com.example.sgo_crm.model.FbAdPageResponse;
 import com.example.sgo_crm.service.FaceBookService;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,20 @@ public class FacebookServiceImpl implements FaceBookService {
         if (fbAdPageResponse != null && fbAdPageResponse.getData() != null) {
             data = fbAdPageResponse.getData();
         }
+        return data;
+    }
+
+    @Override
+    public List<FbAdAccountResponse.Data> getFbAdAccountsOfUser(String userAccessToken) {
+        String pagesUrl = "https://graph.facebook.com/v19.0/me?fields=adaccounts&access_token=" + userAccessToken;
+        FbAdAccountResponse fbAdAccountResponse = restTemplate.getForObject(pagesUrl, FbAdAccountResponse.class);
+
+        List<FbAdAccountResponse.Data> data = null;
+
+        if(fbAdAccountResponse != null && fbAdAccountResponse.getData() != null) {
+            data = fbAdAccountResponse.getData();
+        }
+
         return data;
     }
 }
