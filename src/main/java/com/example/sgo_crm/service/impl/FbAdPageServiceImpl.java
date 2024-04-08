@@ -1,21 +1,15 @@
 package com.example.sgo_crm.service.impl;
 
+import com.example.sgo_crm.DTO.DetailFbAdPageDTO;
 import com.example.sgo_crm.DTO.ListPageDTO;
-import com.example.sgo_crm.model.APIResponse;
-import com.example.sgo_crm.model.ConversationResponse;
-import com.example.sgo_crm.model.FbAdAccountResponse;
-import com.example.sgo_crm.model.FbAdPageResponse;
-import org.springframework.web.client.RestTemplate;
+import com.example.sgo_crm.model.*;
 import com.example.sgo_crm.repository.FbAdPageRepository;
 import com.example.sgo_crm.service.FbAdPageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.xml.crypto.Data;
 import java.util.List;
 
 @Service
@@ -63,10 +57,19 @@ public class FbAdPageServiceImpl implements FbAdPageService {
     public APIResponse getFbAdPage(String userAccessToken, Long pageId) {
 
         List<FbAdAccountResponse.Data> data = facebookService.getFbAdAccountsOfUser(userAccessToken);
-        //fbAdPageRepository.getFbAdPageByPageId(pageId)
+
+        Double totalBudget = 0.0;
+
+        for(FbAdAccountResponse.Data dt:data) {
+
+
+        }
+
+        DetailFbAdPageDTO detailFbAdPageDTO = fbAdPageRepository.getFbAdPageByPageId(pageId);
+        detailFbAdPageDTO.setSpend(totalBudget.toString());
         return APIResponse.builder()
                 .statusCode(200)
                 .message("Chi tiết page quảng cáo")
-                .data(data).build();
+                .data(detailFbAdPageDTO).build();
     }
 }
