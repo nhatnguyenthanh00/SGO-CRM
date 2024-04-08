@@ -129,7 +129,7 @@ public class CampaignServiceImpl implements CampaignService {
             return campaignRepository.findAll(pageable);
         }
 
-        Long cpId = null;
+        Long cpId;
         try {
             cpId = Long.parseLong(id);
         }catch (NumberFormatException e) {
