@@ -45,15 +45,16 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/v1/users/search").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/pages").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/v1/pages/{pageId}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/pages/search").authenticated()
                         .requestMatchers("/api/v1/role/**").permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/campaigns/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll())
-                //.oauth2Login(Customizer.withDefaults());
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .oauth2Login(Customizer.withDefaults());
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

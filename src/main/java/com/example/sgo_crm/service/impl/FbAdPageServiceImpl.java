@@ -1,6 +1,7 @@
 package com.example.sgo_crm.service.impl;
 
 import com.example.sgo_crm.DTO.ListPageDTO;
+import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.model.APIResponse;
 import com.example.sgo_crm.model.ConversationResponse;
 import com.example.sgo_crm.model.FbAdAccountResponse;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,5 +70,52 @@ public class FbAdPageServiceImpl implements FbAdPageService {
                 .statusCode(200)
                 .message("Chi tiết page quảng cáo")
                 .data(data).build();
+    }
+
+    @Override
+    public APIResponse findFbAdPages(String userAccessToken, String id, String name, String numberOfConversation, int page) {
+
+        APIResponse response = getFbAdPages(userAccessToken, page);
+
+        if (id.equals("") && name.equals("") && numberOfConversation.equals("")) {
+            return response;
+        }
+
+        Long pageId = 0L;
+        if(!id.equals("")) {
+            try {
+                pageId = Long.parseLong(id);
+            }catch (NumberFormatException e) {
+                throw new InvalidFormatException("Page id không hợp lệ");
+            }
+        }
+
+        int noc = 0;
+        if(!numberOfConversation.equals("")) {
+            try {
+                noc = Integer.parseInt(numberOfConversation);
+            }catch (NumberFormatException e) {
+                throw new InvalidFormatException("Số lượng tin nhắn không hợp lệ");
+            }
+        }
+
+        List<ListPageDTO> listPageDTOS = (List<ListPageDTO>) response.getData();
+        List<ListPageDTO> rs = new ArrayList<>();
+
+        for(ListPageDTO listPageDTO:listPageDTOS) {
+            if(listPageDTO.getId().equals(pageId) ||
+                    listPageDTO.getName().contains(name) ||
+                    listPageDTO.getNumberOfConversations() == noc) {
+                rs.add(listPageDTO);
+            }
+        }
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .data(rs).build();
+
+        apiResponse.setMessage(!rs.isEmpty() ? "Danh sách tài khoảng quảng cáo" : "Không có kết quả tìm kiếm");
+
+        return apiResponse;
     }
 }
