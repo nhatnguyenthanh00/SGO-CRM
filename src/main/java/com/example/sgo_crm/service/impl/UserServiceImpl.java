@@ -106,9 +106,7 @@ public class UserServiceImpl implements UserService {
                 throw new UsernameExistsException(AppConstants.USERNAME_IS_ALREADY_EXIST);
             }
 
-            if(userRepository.findByPhonenumber(request.getPhonenumber()) != null) {
-                throw new UsernameExistsException(AppConstants.PHONENUMBER_IS_ALREADY_EXIST);
-            }
+
 
             if(!user.getFullname().equals(request.getFullname())) {
                 user.setFullname(request.getFullname());
@@ -123,6 +121,9 @@ public class UserServiceImpl implements UserService {
             }
 
             if(!user.getPhonenumber().equals(request.getPhonenumber())) {
+                if(userRepository.findByPhonenumber(request.getPhonenumber()) != null) {
+                    throw new UsernameExistsException(AppConstants.PHONENUMBER_IS_ALREADY_EXIST);
+                }
                 user.setPhonenumber(request.getPhonenumber());
             }
 
