@@ -54,7 +54,7 @@ public class CampaignController {
                 .data(campaigns.getContent()).build();
 
         if(campaigns.getContent().isEmpty()) {
-            apiResponse.setMessage("Danh sách chiến dịch rỗng");
+            apiResponse.setMessage("Không có kết quả tìm kiếm");
         }
 
         return ResponseEntity.status(HttpStatus.OK)
