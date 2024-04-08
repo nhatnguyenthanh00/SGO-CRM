@@ -104,17 +104,14 @@ public class UserServiceImpl implements UserService {
 
             User user = userRepository.findById(id).get();
 
-            if(userRepository.getByUsername(request.getUsername()) != null) {
-                throw new UsernameExistsException(AppConstants.USERNAME_IS_ALREADY_EXIST);
-            }
-
-
-
             if(!user.getFullname().equals(request.getFullname())) {
                 user.setFullname(request.getFullname());
             }
 
             if(!user.getUsername().equals(request.getUsername())) {
+                if(userRepository.getByUsername(request.getUsername()) != null) {
+                    throw new UsernameExistsException(AppConstants.USERNAME_IS_ALREADY_EXIST);
+                }
                 user.setUsername(request.getUsername());
             }
 
