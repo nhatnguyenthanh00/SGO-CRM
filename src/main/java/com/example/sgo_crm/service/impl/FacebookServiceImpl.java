@@ -1,6 +1,7 @@
 package com.example.sgo_crm.service.impl;
 
 import com.example.sgo_crm.model.ConversationResponse;
+import com.example.sgo_crm.model.FbAdAccountDetailResponse;
 import com.example.sgo_crm.model.FbAdAccountResponse;
 import com.example.sgo_crm.model.FbAdPageResponse;
 import com.example.sgo_crm.service.FaceBookService;
@@ -46,13 +47,27 @@ public class FacebookServiceImpl implements FaceBookService {
 
     @Override
     public List<FbAdAccountResponse.Data> getFbAdAccountsOfUser(String userAccessToken) {
-        String pagesUrl = "https://graph.facebook.com/v19.0/me?fields=adaccounts&access_token=" + userAccessToken;
+        String pagesUrl = "https://graph.facebook.com/v19.0/me/adaccounts?fields=account_id,id&access_token=" + userAccessToken;
         FbAdAccountResponse fbAdAccountResponse = restTemplate.getForObject(pagesUrl, FbAdAccountResponse.class);
 
         List<FbAdAccountResponse.Data> data = null;
 
         if(fbAdAccountResponse != null && fbAdAccountResponse.getData() != null) {
             data = fbAdAccountResponse.getData();
+        }
+
+        return data;
+    }
+
+    @Override
+    public List<FbAdAccountDetailResponse.Data> getFbAdAccountsInsights(String adAccountId, String userAccessToken) {
+        String pagesUrl = "https://graph.facebook.com/v19.0/" + adAccountId + "/insights?fields=spend,date_start,date_stop&access_token=" + userAccessToken;
+        FbAdAccountDetailResponse fbAdAccountDetailResponse = restTemplate.getForObject(pagesUrl, FbAdAccountDetailResponse.class);
+
+        List<FbAdAccountDetailResponse.Data> data = null;
+
+        if(fbAdAccountDetailResponse != null && fbAdAccountDetailResponse.getData() != null) {
+            data = fbAdAccountDetailResponse.getData();
         }
 
         return data;
