@@ -129,11 +129,13 @@ public class CampaignServiceImpl implements CampaignService {
             return campaignRepository.findAll(pageable);
         }
 
-        Long cpId;
-        try {
-            cpId = Long.parseLong(id);
-        }catch (NumberFormatException e) {
-            throw new InvalidFormatException("Campaign id phải là một số");
+        Long cpId = null;
+        if(!id.equals("")) {
+            try {
+                cpId = Long.parseLong(id);
+            }catch (NumberFormatException e) {
+                throw new InvalidFormatException("Campaign id phải là một số");
+            }
         }
 
         return campaignRepository.findCampaignsByCampaignIdAndCampaignName(cpId, name.trim(), pageable);
