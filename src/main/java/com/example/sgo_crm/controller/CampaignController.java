@@ -43,7 +43,7 @@ public class CampaignController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> findCampaign(@RequestParam(value = "id", required = false) Long id,
+    public ResponseEntity<?> findCampaign(@RequestParam(value = "id", required = false) String id,
                                           @RequestParam(value = "name", required = false) String name,
                                           @RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.findCampaigns(id,name,page);
