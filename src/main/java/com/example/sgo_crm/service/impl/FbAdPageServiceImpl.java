@@ -7,6 +7,7 @@ import com.example.sgo_crm.model.APIResponse;
 import com.example.sgo_crm.model.ConversationResponse;
 import com.example.sgo_crm.model.FbAdAccountResponse;
 import com.example.sgo_crm.model.FbAdPageResponse;
+import com.example.sgo_crm.repository.FbAdAccountRepository;
 import org.springframework.web.client.RestTemplate;
 import com.example.sgo_crm.model.*;
 import com.example.sgo_crm.repository.FbAdPageRepository;
@@ -27,13 +28,13 @@ public class FbAdPageServiceImpl implements FbAdPageService {
 
     private final FacebookServiceImpl facebookService;
 
-    private final UserServiceImpl userService;
+    private final FbAdAccountServiceImpl fbAdAccountService;
 
     @Autowired
-    public FbAdPageServiceImpl(FbAdPageRepository fbAdPageRepository, FacebookServiceImpl facebookService, UserServiceImpl userService) {
+    public FbAdPageServiceImpl(FbAdPageRepository fbAdPageRepository, FacebookServiceImpl facebookService, FbAdAccountServiceImpl fbAdAccountService) {
         this.fbAdPageRepository = fbAdPageRepository;
         this.facebookService = facebookService;
-        this.userService = userService;
+        this.fbAdAccountService = fbAdAccountService;
     }
 
 
@@ -70,9 +71,24 @@ public class FbAdPageServiceImpl implements FbAdPageService {
         DetailFbAdPageDTO detailFbAdPageDTO = fbAdPageRepository.getFbAdPageByPageId(pageId);
 
         //Lay tat ca fb ad account duoc gan voi page
+        List<FbAdAccount> fbAdAccounts = fbAdAccountService.getFbAdAccountByPageId(pageId);
 
+        //tinh tong tien chay quang cao cho page
+        Double totalSpend = 0.0;
+        for(FbAdAccount fbAdAccount : fbAdAccounts) {
+            FbAdAccountDetailResponse.Data data = facebookService.getFacebookAdAccount(userAccessToken, fbAdAccount.getFbAccountId());
+            totalSpend += data.getSpend();
+        }
 
-        return null;
+        detailFbAdPageDTO.setSpend(totalSpend.toString());
+
+        APIResponse response = APIResponse.builder()
+                .statusCode(200)
+                .message("Thành công lấy chi tiết page")
+                .data(detailFbAdPageDTO)
+                .build();
+
+        return response;
     }
 
     @Override

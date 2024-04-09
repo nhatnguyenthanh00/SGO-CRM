@@ -13,7 +13,7 @@ public interface FaceBookService {
 
     List<FbAdPageResponse.Data> getFbAdPagesOfUser(String userAccessToken);
 
-    List<FbAdAccountResponse.Data> getFbAdAccountsOfUser(String userAccessToken);
+    FbAdAccountDetailResponse.Data getFacebookAdAccount(String userAccessToken, String adAccountId);
 
-    List<FbAdAccountDetailResponse.Data> getFbAdAccountsInsights(String adAccountId, String userAccessToken);
+    //List<FbAdAccountDetailResponse.Data> getFbAdAccountsInsights(String adAccountId, String userAccessToken);
 }
