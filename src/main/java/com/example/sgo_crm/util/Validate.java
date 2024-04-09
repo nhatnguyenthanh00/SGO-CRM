@@ -87,9 +87,10 @@ public class Validate {
         }
     }
 
-    public void isValidData(String campaignName, Date startDate, Date endDate){
+    public void isValidData(String campaignName, Date startDate, Date endDate, int status){
         isValidCampaignName(campaignName);
         isValidCampaignDate(startDate,endDate);
+        isValidCampaignStatus(status);
     }
 
     public void isValidCampaignName(String campaignName) {
@@ -114,6 +115,11 @@ public class Validate {
         if(!endDate.after(startDate)){
             throw new InvalidFormatException("Ngày kết thúc chiến dịch phải sau ngày bắt đầu chiến dịch");
         }
+    }
+
+    public void isValidCampaignStatus(int status){
+        if(status<-1 || status >1)
+            throw new InvalidFormatException("Status chiến dịch không hợp lệ");
     }
 
 }

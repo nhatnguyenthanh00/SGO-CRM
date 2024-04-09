@@ -60,7 +60,7 @@ public class CampaignServiceImpl implements CampaignService {
         } catch (ParseException e) {
             throw new InvalidFormatException(AppConstants.DATE_IS_INVALID);
         }
-        validate.isValidData(campaignAddRequest.getCampaignName(), startDate, endDate);
+        validate.isValidData(campaignAddRequest.getCampaignName(), startDate, endDate, campaignAddRequest.getStatus());
         if (campaignRepository.findCampaignByCampaignName(campaignAddRequest.getCampaignName()) != null) {
             throw new UsernameExistsException(AppConstants.CAMPAIGNNAME_IS_ALREADY_EXIST);
         }
@@ -89,7 +89,7 @@ public class CampaignServiceImpl implements CampaignService {
         } catch (ParseException e) {
             throw new InvalidFormatException(AppConstants.DATE_IS_INVALID);
         }
-        validate.isValidData(campaignAddRequest.getCampaignName(), startDate, endDate);
+        validate.isValidData(campaignAddRequest.getCampaignName(), startDate, endDate, campaignAddRequest.getStatus());
         Campaign existedCampaign = campaignRepository.findCampaignByCampaignName(campaignAddRequest.getCampaignName());
         if (existedCampaign != null && existedCampaign.getCampaignId() != id) {
             throw new UsernameExistsException(AppConstants.CAMPAIGNNAME_IS_ALREADY_EXIST);
