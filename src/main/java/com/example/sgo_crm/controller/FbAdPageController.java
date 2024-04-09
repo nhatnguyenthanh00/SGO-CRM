@@ -30,7 +30,7 @@ public class FbAdPageController {
         return ResponseEntity.ok().body(apiResponse);
     }
 
-    // chưa dev xong
+    // còn phần tra cứu theo ngày
     @GetMapping("/{pageId}")
     public ResponseEntity<?> getfbAdPageByPageId(@RegisteredOAuth2AuthorizedClient("facebook") OAuth2AuthorizedClient authorizedClient,
                                                  @PathVariable Long pageId) {

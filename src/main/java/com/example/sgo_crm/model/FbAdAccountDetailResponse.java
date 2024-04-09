@@ -5,13 +5,13 @@ import java.util.List;
 
 public class FbAdAccountDetailResponse {
 
-    private List<FbAdAccountDetailResponse.Data> data;
+    private FbAdAccountDetailResponse.Data data;
 
-    public List<FbAdAccountDetailResponse.Data> getData() {
+    public FbAdAccountDetailResponse.Data getData() {
         return data;
     }
 
-    public void setData(List<FbAdAccountDetailResponse.Data> data) {
+    public void setData(FbAdAccountDetailResponse.Data data) {
         this.data = data;
     }
 
