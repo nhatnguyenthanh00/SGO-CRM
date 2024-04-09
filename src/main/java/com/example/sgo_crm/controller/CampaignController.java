@@ -43,7 +43,7 @@ public class CampaignController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> findCampaign(@RequestParam(value = "id", required = false) Long id,
+    public ResponseEntity<?> findCampaign(@RequestParam(value = "id", required = false) String id,
                                           @RequestParam(value = "name", required = false) String name,
                                           @RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.findCampaigns(id,name,page);
@@ -54,7 +54,7 @@ public class CampaignController {
                 .data(campaigns.getContent()).build();
 
         if(campaigns.getContent().isEmpty()) {
-            apiResponse.setMessage("Danh sách chiến dịch rỗng");
+            apiResponse.setMessage("Không có kết quả tìm kiếm");
         }
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -86,7 +86,7 @@ public class CampaignController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) int status,
+    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) String status,
                                              @RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.filterCampaigns(status, page);
 

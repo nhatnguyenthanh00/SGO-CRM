@@ -63,7 +63,7 @@ public class User implements UserDetails {
     @JsonManagedReference
     private Set<Role> roles;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "UserCampaign",
             joinColumns = @JoinColumn(name = "user_Id"),

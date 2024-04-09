@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
@@ -121,20 +118,44 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public Page<Campaign> findCampaigns(Long id, String name, int page) {
+    public Page<Campaign> findCampaigns(String id, String name, int page) {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        if (id == null && name.equals("")) {
+
+        if (id.equals("") && name.equals("")) {
             return campaignRepository.findAll(pageable);
         }
-        return campaignRepository.findCampaignsByCampaignIdAndCampaignName(id, name.trim(), pageable);
+
+        Long cpId = null;
+        if(!id.equals("")) {
+            try {
+                cpId = Long.parseLong(id);
+            }catch (NumberFormatException e) {
+                throw new InvalidFormatException("Campaign id phải là một số");
+            }
+        }
+
+        return campaignRepository.findCampaignsByCampaignIdAndCampaignName(cpId, name.trim(), pageable);
     }
 
     @Override
-    public Page<Campaign> filterCampaigns(int status, int page) {
+    public Page<Campaign> filterCampaigns(String status, int page) {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return campaignRepository.filterCampaignsByStatus(status, pageable);
+
+        int parsedStatus;
+        try {
+            parsedStatus = Integer.parseInt(status);
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException(AppConstants.STATUS_IS_INVALID);
+        }
+
+        // Check if the status is one of the accepted values
+        if (!Arrays.asList(-1, 0, 1).contains(parsedStatus)) {
+            throw new InvalidFormatException(AppConstants.STATUS_IS_INVALID);
+        }
+
+        return campaignRepository.filterCampaignsByStatus(parsedStatus, pageable);
     }
 
     public void deleteCampaign(Long id) {
