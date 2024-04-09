@@ -64,21 +64,27 @@ public class FbAdPageServiceImpl implements FbAdPageService {
     @Override
     public APIResponse getFbAdPage(String userAccessToken, Long pageId) {
 
-        List<FbAdAccountResponse.Data> data = facebookService.getFbAdAccountsOfUser(userAccessToken);
+//        List<FbAdAccountResponse.Data> data = facebookService.getFbAdAccountsOfUser(userAccessToken);
+//
+//        Double totalBudget = 0.0;
+//
+//        for(FbAdAccountResponse.Data dt:data) {
+//
+//
+//
+//        }
+//
+//        DetailFbAdPageDTO detailFbAdPageDTO = fbAdPageRepository.getFbAdPageByPageId(pageId);
+//        detailFbAdPageDTO.setSpend(totalBudget.toString());
+//        return APIResponse.builder()
+//                .statusCode(200)
+//                .message("Chi tiết page quảng cáo")
+//                .data(detailFbAdPageDTO).build();
+        // lay tat ca page tren fb
+        List<FbAdPageResponse.Data> data = facebookService.getFbAdPagesOfUser(userAccessToken);
 
-        Double totalBudget = 0.0;
 
-        for(FbAdAccountResponse.Data dt:data) {
-
-
-        }
-
-        DetailFbAdPageDTO detailFbAdPageDTO = fbAdPageRepository.getFbAdPageByPageId(pageId);
-        detailFbAdPageDTO.setSpend(totalBudget.toString());
-        return APIResponse.builder()
-                .statusCode(200)
-                .message("Chi tiết page quảng cáo")
-                .data(detailFbAdPageDTO).build();
+        return null;
     }
 
     @Override
