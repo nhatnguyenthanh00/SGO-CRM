@@ -19,10 +19,13 @@ public class FbAdPageServiceImpl implements FbAdPageService {
 
     private final FacebookServiceImpl facebookService;
 
+    private final UserServiceImpl userService;
+
     @Autowired
-    public FbAdPageServiceImpl(FbAdPageRepository fbAdPageRepository, FacebookServiceImpl facebookService) {
+    public FbAdPageServiceImpl(FbAdPageRepository fbAdPageRepository, FacebookServiceImpl facebookService, UserServiceImpl userService) {
         this.fbAdPageRepository = fbAdPageRepository;
         this.facebookService = facebookService;
+        this.userService = userService;
     }
 
 
@@ -56,20 +59,26 @@ public class FbAdPageServiceImpl implements FbAdPageService {
     @Override
     public APIResponse getFbAdPage(String userAccessToken, Long pageId) {
 
-        List<FbAdAccountResponse.Data> data = facebookService.getFbAdAccountsOfUser(userAccessToken);
+//        List<FbAdAccountResponse.Data> data = facebookService.getFbAdAccountsOfUser(userAccessToken);
+//
+//        Double totalBudget = 0.0;
+//
+//        for(FbAdAccountResponse.Data dt:data) {
+//
+//
+//        }
+//
 
-        Double totalBudget = 0.0;
-
-        for(FbAdAccountResponse.Data dt:data) {
-
-
-        }
+//        detailFbAdPageDTO.setSpend(totalBudget.toString());
+//        return APIResponse.builder()
+//                .statusCode(200)
+//                .message("Chi tiết page quảng cáo")
+//                .data(detailFbAdPageDTO).build();
 
         DetailFbAdPageDTO detailFbAdPageDTO = fbAdPageRepository.getFbAdPageByPageId(pageId);
-        detailFbAdPageDTO.setSpend(totalBudget.toString());
-        return APIResponse.builder()
-                .statusCode(200)
-                .message("Chi tiết page quảng cáo")
-                .data(detailFbAdPageDTO).build();
+
+        //Lay tat ca fb ad account duoc gan voi page
+
+        return null;
     }
 }
