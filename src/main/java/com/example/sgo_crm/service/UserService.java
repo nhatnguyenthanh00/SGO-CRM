@@ -15,7 +15,7 @@ public interface UserService {
 
     User updateUserInfo(String id, UserRequest request);
 
-    List<User> getAllUser();
-
     Page<User> findUser(String id, String name, String role, int page);
+
+    Page<User> getUsers(int page);
 }

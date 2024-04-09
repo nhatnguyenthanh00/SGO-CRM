@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface CampaignRepository extends JpaRepository<Campaign,Long> {
     Campaign findCampaignByCampaignName(String campaignName);
 
+    Campaign findCampaignByCampaignIdAndCampaignName(Long campaignId, String campaignName);
+
     Optional<Campaign> getCampaignByCampaignId(Long campaignId);
 
     Page<Campaign> findAll(Pageable pageable);

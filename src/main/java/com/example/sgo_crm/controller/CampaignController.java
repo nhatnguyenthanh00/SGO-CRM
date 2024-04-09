@@ -39,7 +39,26 @@ public class CampaignController {
         }
         Campaign campaign = campaignService.addCampaign(campaignAddRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaign).build());
+                .body(APIResponse.builder().statusCode(201).message("Thêm thành công chiến dịch").data(campaignAddRequest).build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> findCampaign(@RequestParam(value = "id", required = false) String id,
+                                          @RequestParam(value = "name", required = false) String name,
+                                          @RequestParam(defaultValue = "1", required = false) int page) {
+        Page<Campaign> campaigns = campaignService.findCampaigns(id,name,page);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .statusCode(200)
+                .message("Thành công lấy danh sách chiến dịch")
+                .data(campaigns.getContent()).build();
+
+        if(campaigns.getContent().isEmpty()) {
+            apiResponse.setMessage("Không có kết quả tìm kiếm");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiResponse);
     }
 
     @GetMapping("/{campaignId}")
@@ -50,7 +69,7 @@ public class CampaignController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCampaigns(@RequestParam(defaultValue = "0", required = false) int page) {
+    public ResponseEntity<?> getCampaigns(@RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.getCampaigns(page);
 
         APIResponse apiResponse = APIResponse.builder()
@@ -67,8 +86,8 @@ public class CampaignController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) int status,
-                                             @RequestParam(defaultValue = "0", required = false) int page) {
+    public ResponseEntity<?> filterCampaigns(@RequestParam(value = "status",required = false) String status,
+                                             @RequestParam(defaultValue = "1", required = false) int page) {
         Page<Campaign> campaigns = campaignService.filterCampaigns(status, page);
 
         APIResponse apiResponse = APIResponse.builder()
@@ -83,6 +102,39 @@ public class CampaignController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(apiResponse);
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteCampaign(@PathVariable Long id){
+        campaignService.deleteCampaign(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Delete campaign successful.");
+    }
+
+    @PatchMapping(value = "/{id}/update")
+    public ResponseEntity<?> updateCampaign(@PathVariable Long id,@Valid @RequestBody CampaignAddRequest campaignAddRequest,
+                                         BindingResult result){
+        if(result.hasErrors()) {
+            List<String> errorMessages = result.getAllErrors()
+                    .stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
+        }
+        Campaign campaign = campaignService.updateCampaign(id,campaignAddRequest);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(APIResponse.builder().statusCode(200).message("Sửa thành công chiến dịch").data(campaignAddRequest).build());
+    }
+
+    @PostMapping(value = "/{campaignId}/assign-user")
+    public ResponseEntity<?> assignUsersToCampaign(@PathVariable Long campaignId, @RequestBody List<String> userIds) {
+        campaignService.assignUsersToCampaign(userIds, campaignId);
+        Campaign campaign = campaignService.getCampaign(campaignId);
+        if(campaign == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(APIResponse.builder().statusCode(400).message("Chiến dịch không tồn tại"));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.builder().statusCode(201).message("Gán thành công nhân viên vào chiến dịch").data(campaignService.getAllUserByCampaign(campaignId)).build());
+    }
+
 
     @ExceptionHandler(UsernameExistsException.class)
     public ResponseEntity<?> handleUsernameExistsException(UsernameExistsException e) {

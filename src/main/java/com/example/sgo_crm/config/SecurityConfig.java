@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/v1/users/search").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/pages").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/pages/{pageId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/pages/search").permitAll()
                         .requestMatchers("/api/v1/role/**").permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/campaigns/**").permitAll()

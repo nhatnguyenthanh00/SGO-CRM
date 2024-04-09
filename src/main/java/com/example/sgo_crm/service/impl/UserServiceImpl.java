@@ -2,8 +2,10 @@ package com.example.sgo_crm.service.impl;
 
 import com.example.sgo_crm.DTO.UserDTO;
 import com.example.sgo_crm.exception.DataSaveException;
+import com.example.sgo_crm.exception.InvalidFormatException;
 import com.example.sgo_crm.exception.UsernameExistsException;
 import com.example.sgo_crm.model.APIResponse;
+import com.example.sgo_crm.model.Campaign;
 import com.example.sgo_crm.model.Role;
 import com.example.sgo_crm.model.User;
 import com.example.sgo_crm.repository.UserRepository;
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleServiceImpl roleService;
+
 
     private final Validate validate;
 
@@ -64,7 +67,11 @@ public class UserServiceImpl implements UserService {
 
             Set<Role> roleSet = new HashSet<>();
             for(String role: request.getRoles()) {
-                roleSet.add(roleService.findByRoleName(role));
+
+                Role roleF = roleService.findByRoleName(role.trim())
+                        .orElseThrow(() -> new InvalidFormatException("Role không hợp lệ"));
+
+                roleSet.add(roleF);
             }
 
             User user = User.builder()
@@ -97,19 +104,14 @@ public class UserServiceImpl implements UserService {
 
             User user = userRepository.findById(id).get();
 
-            if(userRepository.getByUsername(request.getUsername()) != null) {
-                throw new UsernameExistsException(AppConstants.USERNAME_IS_ALREADY_EXIST);
-            }
-
-            if(userRepository.findByPhonenumber(request.getPhonenumber()) != null) {
-                throw new UsernameExistsException(AppConstants.PHONENUMBER_IS_ALREADY_EXIST);
-            }
-
             if(!user.getFullname().equals(request.getFullname())) {
                 user.setFullname(request.getFullname());
             }
 
             if(!user.getUsername().equals(request.getUsername())) {
+                if(userRepository.getByUsername(request.getUsername()) != null) {
+                    throw new UsernameExistsException(AppConstants.USERNAME_IS_ALREADY_EXIST);
+                }
                 user.setUsername(request.getUsername());
             }
 
@@ -118,13 +120,19 @@ public class UserServiceImpl implements UserService {
             }
 
             if(!user.getPhonenumber().equals(request.getPhonenumber())) {
+                if(userRepository.findByPhonenumber(request.getPhonenumber()) != null) {
+                    throw new UsernameExistsException(AppConstants.PHONENUMBER_IS_ALREADY_EXIST);
+                }
                 user.setPhonenumber(request.getPhonenumber());
             }
 
             // update role
             Set<Role> roleSet = new HashSet<>();
             for(String role: request.getRoles()) {
-                roleSet.add(roleService.findByRoleName(role));
+                Role roleF = roleService.findByRoleName(role.trim())
+                        .orElseThrow(() -> new InvalidFormatException("Role không hợp lệ"));
+
+                roleSet.add(roleF);
             }
 
             user.setRoles(roleSet);
@@ -143,27 +151,68 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    public List<User> findAllById(List<String> userIds) {
+        return userRepository.findAllById(userIds);
+    }
+
     @Override
     public Page<User> findUser(String id, String name, String role, int page) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return userRepository.findUser(id.trim(), name.trim(), role.trim(), pageable);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        if (id.equals("") && name.equals("") && role.equals("")) {
+            return userRepository.findAll(pageable);
+        } else {
+            return userRepository.findUser(id.trim(), name.trim(), role.trim(), pageable);
+        }
+
     }
 
     public List<UserDTO> getAllUserDTO(){
         List<User> userList = userRepository.findAll();
-        List<UserDTO> userDTOList = new ArrayList<>();
-        for(User user : userList){
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUserId(user.getUserId());
-            userDTO.setFullname(user.getFullname());
-            userDTO.setRoles(user.getRoles());
-            userDTOList.add(userDTO);
-        }
+        List<UserDTO> userDTOList = changeToDTO(userList);
         return userDTOList;
     }
 
     public void deleteUserById(String id){
         userRepository.deleteById(id);
     }
+
+
+    @Override
+    public Page<User> getUsers(int page){
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<User> users = userRepository.findAll(pageable);
+        return userRepository.findAll(pageable);
+    }
+
+    public Page<UserDTO> getUsersDTO(int page) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<User> usersPage = userRepository.findAll(pageable);
+
+        // Sử dụng map để chuyển đổi Page<User> thành Page<UserDTO>
+        Page<UserDTO> usersDTOPage = usersPage.map(this::changeToDTO);
+
+        return usersDTOPage;
+    }
+
+    public List<UserDTO> changeToDTO(List<User> userList){
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for(User user : userList){
+            UserDTO userDTO = changeToDTO(user);
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
+    }
+
+    public UserDTO changeToDTO(User user){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setFullname(user.getFullname());
+        userDTO.setRoles(user.getRoles());
+        return userDTO;
+    }
+
+
 }

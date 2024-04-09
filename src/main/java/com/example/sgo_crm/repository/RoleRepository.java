@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-    Role findByRoleName(String rolename);
+    Optional<Role> findByRoleName(String rolename);
 
     @Query(value ="SELECT new com.example.sgo_crm.DTO.RoleDTO(role.roleId,role.roleName,role.roleDescription) FROM Role role")
     List<RoleDTO> getAllRole();
